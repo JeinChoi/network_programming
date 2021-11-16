@@ -1,7 +1,6 @@
 // JavaChatClientView.java
 // ½ÇÁúÀûÀÎ Ã¤ÆÃ Ã¢
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,7 +24,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
-import java.awt.Image;
 
 public class JavaChatClientView extends JFrame {
 	private JPanel contentPane;
@@ -46,96 +44,42 @@ public class JavaChatClientView extends JFrame {
 	 * Create the frame.
 	 */
 	public JavaChatClientView(String username, String ip_addr, String port_no) {
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		setBounds(100, 100, 397, 462);
-//		contentPane = new JPanel();
-//		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-//		setContentPane(contentPane);
-//		contentPane.setLayout(null);
-//
-//		JScrollPane scrollPane = new JScrollPane();
-//		scrollPane.setBounds(12, 10, 352, 340);
-//		contentPane.add(scrollPane);
-//		
-//		textArea = new JTextPane();
-//		textArea.setEditable(true);
-//		textArea.setFont(new Font("±¼¸²Ã¼", Font.PLAIN, 14));
-//		scrollPane.setViewportView(textArea);
-//
-//		txtInput = new JTextField();
-//		txtInput.setBounds(91, 365, 185, 40);
-//		contentPane.add(txtInput);
-//		txtInput.setColumns(10);
-//
-//		btnSend = new JButton("Send");
-//		btnSend.setBounds(288, 364, 76, 40);
-//		contentPane.add(btnSend);
-//		
-//		lblUserName = new JLabel("Name");
-//		lblUserName.setFont(new Font("±¼¸²", Font.PLAIN, 14));
-//		lblUserName.setHorizontalAlignment(SwingConstants.CENTER);
-//		lblUserName.setBounds(12, 364, 67, 40);
-//		contentPane.add(lblUserName);
-//		setVisible(true);
-//	
-//		AppendText("User " + username + " connecting " + ip_addr + " " + port_no);
-//		UserName = username;
-//		lblUserName.setText(username+">");
-		   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		      setSize(400,600);
-		      setBounds(100, 100, 386, 512);
-		      contentPane = new JPanel();
-		      contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		      setContentPane(contentPane);
-		      contentPane.setLayout(null);
-		      
-		      JPanel contentPane_1 = new JPanel();
-		      contentPane_1.setBackground(Color.WHITE);
-		      contentPane_1.setLayout(null);
-		      contentPane_1.setBorder(new EmptyBorder(5, 5, 5, 5));
-		      contentPane_1.setBounds(61, 0, 311, 485);
-		      contentPane.add(contentPane_1);
-		      
-		      JLabel FriendLabel = new JLabel("\uCE5C\uAD6C");
-		      FriendLabel.setFont(new Font("±¼¸²", Font.BOLD, 18));
-		      FriendLabel.setBounds(23, 23, 76, 34);
-		      contentPane_1.add(FriendLabel);
-		      
-		      JLabel userNameLabel = new JLabel(username);
-		      userNameLabel.setFont(new Font("±¼¸²", Font.BOLD, 14));
-		      userNameLabel.setBounds(77, 75, 68, 15);
-		      contentPane_1.add(userNameLabel);
-		      
-		      JPanel userImgPanel = new JPanel();
-		      userImgPanel.setBackground(Color.WHITE);
-		      userImgPanel.setBounds(23, 66, 42, 42);
-		      contentPane_1.add(userImgPanel);
-//		      MyPanel panel = new MyPanel("src/icon1.jpg");
-//		      contentPane_1.add(panel);
-		      ImageIcon icon = new ImageIcon("src/basicProfileImg.jpg");
-		      Image img = icon.getImage();
-		      Image changeImg = img.getScaledInstance(41,41, Image.SCALE_SMOOTH);
-		      ImageIcon changeIcon = new ImageIcon(changeImg);
-		      JLabel label = new JLabel(changeIcon);
-		      
-		      userImgPanel.add(label);
-		      
-		      JPanel friendIconPanel = new JPanel();
-		      friendIconPanel.setBounds(12, 47, 40, 40);
-		      contentPane.add(friendIconPanel);
-		      
-		      ImageIcon menuIcon1 = new ImageIcon("src/menuIcon1.png");
-		      JLabel MenuIconlabel = new JLabel(menuIcon1);
-		      friendIconPanel.add(MenuIconlabel);
-		      
-		      
-		      JPanel chatIconPanel = new JPanel();
-		      chatIconPanel.setBounds(12, 119, 40, 40);
-		      contentPane.add(chatIconPanel);
-		      
-		      ImageIcon menuIcon2 = new ImageIcon("src/menuIcon2.png");
-		      JLabel chatIconLabel = new JLabel(menuIcon2);
-		      chatIconPanel.add(chatIconLabel);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 397, 462);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(12, 10, 352, 340);
+		contentPane.add(scrollPane);
+		
+		textArea = new JTextPane();
+		textArea.setEditable(true);
+		textArea.setFont(new Font("±¼¸²Ã¼", Font.PLAIN, 14));
+		scrollPane.setViewportView(textArea);
+
+		txtInput = new JTextField();
+		txtInput.setBounds(91, 365, 185, 40);
+		contentPane.add(txtInput);
+		txtInput.setColumns(10);
+
+		btnSend = new JButton("Send");
+		btnSend.setBounds(288, 364, 76, 40);
+		contentPane.add(btnSend);
+		
+		lblUserName = new JLabel("Name");
+		lblUserName.setFont(new Font("±¼¸²", Font.PLAIN, 14));
+		lblUserName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUserName.setBounds(12, 364, 67, 40);
+		contentPane.add(lblUserName);
+		setVisible(true);
+	
+		AppendText("User " + username + " connecting " + ip_addr + " " + port_no);
+		UserName = username;
+		lblUserName.setText(username+">");
+		
 		try {
 			socket = new Socket(ip_addr, Integer.parseInt(port_no));
 			is = socket.getInputStream();
