@@ -1,0 +1,10 @@
+import javax.swing.JFrame;
+public class ChatRoom extends JFrame{
+	
+		public ChatRoom() {
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		      setSize(400,600);
+		}
+	}
+
+

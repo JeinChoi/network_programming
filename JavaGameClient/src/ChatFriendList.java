@@ -1,14 +1,14 @@
 // JavaChatClientMain.java
 // Java Client 시작import java.awt.BorderLayout;
-
+import java.util.ArrayList;
 import javax.swing.JFrame;
+import java.awt.event.*;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-
 import com.sun.tools.javac.Main;
 /*
 import JavaGameClientView.ImageSendAction;
@@ -23,7 +23,7 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -32,9 +32,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.awt.event.ActionEvent;
 import java.awt.*;
+import javax.swing.Icon;
+import javax.swing.JTextArea;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 public class ChatFriendList extends JFrame {
+   ArrayList userNameList = new ArrayList();
 
    private JPanel contentPane;
    private JTextField txtIpAddress;
@@ -65,7 +70,7 @@ public class ChatFriendList extends JFrame {
    private Frame frame;
    private FileDialog fd;
    private JButton imgBtn;
-
+   JPanel chatPanel;
    JPanel panel;
    private JLabel lblMouseEvent;
    private Graphics gc;
@@ -73,10 +78,14 @@ public class ChatFriendList extends JFrame {
    // 그려진 Image를 보관하는 용도, paint() 함수에서 이용한다.
    private Image panelImage = null; 
    private Graphics gc2 = null;
+   
+   private JLabel userListLabel;
+  
    /**
     * Create the frame.
     */
    public ChatFriendList(String username, String ip_addr, String port_no) {
+     this.UserName = username;
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       setSize(400,600);
       setBounds(100, 100, 386, 512);
@@ -112,14 +121,43 @@ public class ChatFriendList extends JFrame {
       Image img = icon.getImage();
       Image changeImg = img.getScaledInstance(41,41, Image.SCALE_SMOOTH);
       ImageIcon changeIcon = new ImageIcon(changeImg);
-      JLabel label = new JLabel(changeIcon);
+      JLabel label1 = new JLabel(changeIcon);
+      JLabel label2 = new JLabel(changeIcon);
+      userImgPanel.add(label1);
       
-      userImgPanel.add(label);
+      JPanel friendImgPanel = new JPanel();
+      friendImgPanel.setBackground(Color.WHITE);
+      friendImgPanel.setBounds(23, 119, 42, 42);
+     
+      ImageIcon friendIcon = new ImageIcon("src/basicProfileImg.jpg");
+      JLabel friendIconlabel = new JLabel(friendIcon);
+      friendImgPanel.add(friendIconlabel);
       
+      contentPane_1.add(friendImgPanel);
+      
+   
+     
+      
+      JLabel friendNameLabel = new JLabel("<dynamic>");
+      friendNameLabel.setFont(new Font("굴림", Font.BOLD, 14));
+      friendNameLabel.setBounds(77, 134, 68, 15);
+      contentPane_1.add(friendNameLabel);
+      
+      class FriendAction extends MouseAdapter // 내부클래스로 액션 이벤트 처리 클래스
+      {
+        
+         public void mouseClicked(MouseEvent e) {
+        	 contentPane_1.setVisible(true);
+        	 chatPanel.setVisible(false);
+        	 
+           }
+      }
+      
+      FriendAction friendAction = new FriendAction();
       JPanel friendIconPanel = new JPanel();
       friendIconPanel.setBounds(12, 47, 40, 40);
       contentPane.add(friendIconPanel);
-      
+      friendIconPanel.addMouseListener(friendAction);
       ImageIcon menuIcon1 = new ImageIcon("src/menuIcon1.png");
       JLabel MenuIconlabel = new JLabel(menuIcon1);
       friendIconPanel.add(MenuIconlabel);
@@ -130,42 +168,50 @@ public class ChatFriendList extends JFrame {
       contentPane.add(chatIconPanel);
       
       ImageIcon menuIcon2 = new ImageIcon("src/menuIcon2.png");
+      
+      chatPanel = new JPanel();//채팅창 현재는 setvisible(false);
+      chatPanel.setBounds(61, 0, 311, 485);
+      chatPanel.setVisible(false);
+      chatPanel.setBackground(Color.WHITE);
+      chatPanel.setLayout(null);
+      
+      class ChatAction extends MouseAdapter // 내부클래스로 액션 이벤트 처리 클래스
+      {
+        
+         public void mouseClicked(MouseEvent e) {
+        	 contentPane_1.setVisible(false);
+        	 chatPanel.setVisible(true);
+        	 contentPane.add(chatPanel);
+        	 JLabel dd = new JLabel("dd?????");
+        	 dd.setSize(50,50);
+        	 dd.setLocation(150,150);
+        	 chatPanel.add(dd);
+           }
+     
+      }
+      ChatAction chatIconeve = new ChatAction();
       JLabel chatIconLabel = new JLabel(menuIcon2);
       chatIconPanel.add(chatIconLabel);
+      chatIconPanel.addMouseListener(chatIconeve);//이 아이콘 누르면 채팅창 뜨도록
       
-      
+     
       //txtIpAddress.addActionListener(action);
       //txtPortNumber.addActionListener(action);
 
 
       try {
          socket = new Socket(ip_addr, Integer.parseInt(port_no));
-//         is = socket.getInputStream();
-//         dis = new DataInputStream(is);
-//         os = socket.getOutputStream();
-//         dos = new DataOutputStream(os);
 
          oos = new ObjectOutputStream(socket.getOutputStream());
          oos.flush();
          ois = new ObjectInputStream(socket.getInputStream());
 
-         // SendMessage("/login " + UserName);
-         ChatMsg obcm = new ChatMsg(UserName, "100", "Hello");
-         //SendObject(obcm);
-
-         ListenNetwork net = new ListenNetwork();
+         ChatMsg obcm = new ChatMsg(UserName, "100", "Hello");//connect
+         //현재 입장한 유저는 ㅇㅇㅇ 입니다.
+         SendObject(obcm);//send
+         EnterUserNetwork net = new EnterUserNetwork();
          net.start();
-         //TextSendAction action = new TextSendAction();
-         //btnSend.addActionListener(action);
-         //txtInput.addActionListener(action);
-         //txtInput.requestFocus();
-         //ImageSendAction action2 = new ImageSendAction();
-         //imgBtn.addActionListener(action2);
-         //MyMouseEvent mouse = new MyMouseEvent();
-         //panel.addMouseMotionListener(mouse);
-         //panel.addMouseListener(mouse);
-         //MyMouseWheelEvent wheel = new MyMouseWheelEvent();
-         //panel.addMouseWheelListener(wheel);
+      
 
 
       } catch (NumberFormatException | IOException e) {
@@ -173,9 +219,33 @@ public class ChatFriendList extends JFrame {
          e.printStackTrace();
          //AppendText("connect error");
       }
+      
+      
+      
+      class MyAction extends MouseAdapter // 내부클래스로 액션 이벤트 처리 클래스
+      {
+         
+         public void mouseClicked(MouseEvent e) {
+           
+            ChatRoom chatrom = new ChatRoom(username, ip_addr, port_no, socket); 
+            chatrom.setVisible(true);
+         }     
+      }
+      
+      MyAction my = new MyAction();
+      friendImgPanel.addMouseListener(my);
+      JLabel label_1 = new JLabel((Icon) null);
+      friendImgPanel.add(label_1);
+      
+      userListLabel = new JLabel("");
+      userListLabel.setBounds(66, 280, 178, 148);
+      contentPane_1.add(userListLabel);
+      
+      
+      
      
    }
-   class ListenNetwork extends Thread {
+   class EnterUserNetwork extends Thread {
       public void run() {
          while (true) {
             try {
@@ -197,14 +267,42 @@ public class ChatFriendList extends JFrame {
                   msg = String.format("[%s]\n%s", cm.UserName, cm.data);
                } else
                   continue;
-               /*
-                * switch (cm.code) { case "200": // chat message if
-                * (cm.UserName.equals(UserName)) AppendTextR(msg); // 내 메세지는 우측에 else
-                * AppendText(msg); break; //case "300": // Image 첨부 if
-                * (cm.UserName.equals(UserName)) AppendTextR("[" + cm.UserName + "]"); else
-                * AppendText("[" + cm.UserName + "]"); AppendImage(cm.img); break; case "500":
-                * // Mouse Event 수신 DoMouseEvent(cm); break; }
-                */
+               switch (cm.code) {
+                     case "100":
+                    
+                        // 유저배열에 새로 들어온 유저를 추가함
+                        userNameList.add(cm.UserName);
+                        String str = String.join(",", userNameList);
+                         userListLabel.setText(str);
+                         
+                        // obcm = new ChatMsg(UserName, "101", str); // 유저 리스트를 보냄 
+                           
+                          // SendObject(obcm);//send
+                         
+                     case "101": // 유저 리스트 받았다면
+                        userListLabel.setText(cm.data);
+                        
+                        
+                        
+                  
+            /*case "200": // chat message
+               if (cm.UserName.equals(UserName))
+                  //AppendTextR(msg); // 내 메세지는 우측에
+               else
+                  //AppendText(msg);
+               break;
+            case "300": // Image 첨부
+               if (cm.UserName.equals(UserName))
+                  //AppendTextR("[" + cm.UserName + "]");
+               else
+                  //AppendText("[" + cm.UserName + "]");
+               //AppendImage(cm.img);
+               break;
+            case "500": // Mouse Event 수신
+               //DoMouseEvent(cm);
+               break;
+               */
+            }
             } catch (IOException e) {
                AppendText("ois.readObject() error");
                try {
@@ -246,6 +344,32 @@ public class ChatFriendList extends JFrame {
 
    }
    
-
-
+   public void SendObject(Object ob) { // 서버로 메세지를 보내는 메소드
+      try {
+         oos.writeObject(ob);
+      } catch (IOException e) {
+         // textArea.append("메세지 송신 에러!!\n");
+         AppendText("SendObject Error");
+      }
+   }
 }
+
+//class MyMouse implements MouseListener{
+//   @Override
+//   public void mouseClicked(MouseEvent e) {
+//      (Window) e.setVisible(false);
+//   }
+//   @Override
+//      public void mouseExited(MouseEvent e){
+//
+//   } 
+//   @Override
+//   public void mouseReleased(MouseEvent e){
+//
+//   } 
+//   @Override
+//   public void mousePressed(MouseEvent e ) {
+//      
+//   }
+//
+//}
