@@ -143,6 +143,8 @@ public class JavaGameServer extends JFrame {
       textArea.append("code = " + msg.code + "\n");
       textArea.append("id = " + msg.UserName + "\n");
       textArea.append("data = " + msg.data + "\n");
+      textArea.append("list = " + msg.al + "\n");
+      
       textArea.setCaretPosition(textArea.getText().length());
    }
 
@@ -153,7 +155,7 @@ public class JavaGameServer extends JFrame {
       private OutputStream os;
       private DataInputStream dis;
       private DataOutputStream dos;
-
+      ArrayList<ChatMsg> chatList = new ArrayList<ChatMsg>();
       private ObjectInputStream ois;
       private ObjectOutputStream oos;
 
@@ -363,17 +365,27 @@ public class JavaGameServer extends JFrame {
                   //Login(cm.code);
                   
                   userNameList.add(cm.UserName);
-                  System.out.println("username "+cm.UserName);
                   //String userNameListStr = String.join(",", userNameList);
                        
                   
-                  WriteOthersObject(cm);
+                 // WriteOthersObject(cm);
                   WriteAll("101");
                } 
                else if(cm.code.matches("101")){
                
                }
-               
+               else if(cm.code.matches("500")) {
+            	   //list 받아와서 출력
+            	  // ArrayList<String> temp = new ArrayList<String>();
+            	   //temp = cm.al;
+            	   System.out.println("list도착"+cm.al+" cm.i "+cm.i);
+            	  // cm.al.clear();
+            	   //chatList.add(cm);
+            	   //System.out.println(chatList);
+            	   //if(chatList.size()>=2)
+            		   //System.out.println((chatList.get(0)).equals(chatList.get(1)));
+            	   
+               }
                else if (cm.code.matches("200")) {
                   msg = String.format("[%s] %s", cm.UserName, cm.data);
                   AppendText(msg); // server 화면에 출력
@@ -417,10 +429,12 @@ public class JavaGameServer extends JFrame {
                      //WriteAll(msg + "\n"); // Write All
                      WriteAllObject(cm);
                   }
-               } else if (cm.code.matches("400")) { // logout message 처리
+               } 
+               else if (cm.code.matches("400")) { // logout message 처리
                   Logout();
                   break;
-               } else { // 300, 500, ... 기타 object는 모두 방송한다.
+               }
+               else { // 300, 500, ... 기타 object는 모두 방송한다.
                   WriteAllObject(cm);
                } 
             } catch (IOException e) {

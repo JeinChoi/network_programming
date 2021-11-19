@@ -1,37 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="basic"/>
+		<item key="selection" value="ListPanel"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
-			<item value="basic"/>
-			<item value="login"/>
-			<item value="Login"/>
-			<item value="WriteOthers"/>
-			<item value="입장"/>
-			<item value="ListenNetwork"/>
-			<item value="sendMessage"/>
-			<item value="sendMeesage"/>
-			<item value="sendMesage"/>
-			<item value="sendMe"/>
-			<item value="sendMsg"/>
-			<item value="sendObject"/>
-			<item value="sendmouse"/>
-			<item value="500"/>
-			<item value="sendobject"/>
+			<item value="ListPanel"/>
+			<item value="userListPanel"/>
+			<item value="al"/>
+			<item value="SendObject"/>
+			<item value="button"/>
+			<item value="username"/>
+			<item value="mouseClicked"/>
+			<item value="New Button"/>
+			<item value="list"/>
+			<item value="setLayout"/>
+			<item value="icon"/>
+			<item value="userLIstPanel"/>
+			<item value="LIstPanel"/>
+			<item value="listPanel"/>
+			<item value="write"/>
 		</list>
 		<list key="replacehistory">
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
-		<item key="DIALOG_X_ORIGIN" value="1306"/>
-		<item key="DIALOG_Y_ORIGIN" value="303"/>
+		<item key="DIALOG_X_ORIGIN" value="1110"/>
+		<item key="DIALOG_Y_ORIGIN" value="391"/>
 		<item key="DIALOG_WIDTH" value="393"/>
 		<item key="DIALOG_HEIGHT" value="523"/>
 		<item key="DIALOG_FONT_NAME" value="1|맑은 고딕|9.0|0|WINDOWS|1|-18|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕"/>
+	</section>
+	<section name="org.eclipse.ui.texteditor.GotoLineAction$GotoLineDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="646"/>
+		<item key="DIALOG_Y_ORIGIN" value="321"/>
 	</section>
 </section>

@@ -1,4 +1,6 @@
 // JavaChatClientMain.java
+import java.util.Arrays;
+import javax.swing.*;
 // Java Client 시작import java.awt.BorderLayout;
 import java.util.ArrayList;
 import javax.swing.JFrame;
@@ -33,14 +35,15 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.awt.*;
+
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JTextArea;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 public class ChatFriendList extends JFrame {
    ArrayList userNameList = new ArrayList();
-
+   ArrayList<String> selectedNameList = new ArrayList<String>();
+   ArrayList<String> sendSelectedNameList = new ArrayList<String>();
+   ArrayList<ListPanel> userOneListPanel = new ArrayList<ListPanel>();
    private JPanel contentPane;
    private JTextField txtIpAddress;
    private JTextField txtPortNumber;
@@ -62,7 +65,7 @@ public class ChatFriendList extends JFrame {
 
    private ObjectInputStream ois;
    private ObjectOutputStream oos;
-
+   JPanel contentPane_1;
    private JLabel lblUserName;
    // private JTextArea textArea;
    private JTextPane textArea;
@@ -80,7 +83,11 @@ public class ChatFriendList extends JFrame {
    private Graphics gc2 = null;
    
    private JLabel userListLabel;
-  
+   
+   private JPanel userListPanel;
+   
+   private JButton testButton;
+  int i=0;
    /**
     * Create the frame.
     */
@@ -94,7 +101,7 @@ public class ChatFriendList extends JFrame {
       setContentPane(contentPane);
       contentPane.setLayout(null);
       
-      JPanel contentPane_1 = new JPanel();
+     contentPane_1 = new JPanel();
       contentPane_1.setBackground(Color.WHITE);
       contentPane_1.setLayout(null);
       contentPane_1.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -147,9 +154,9 @@ public class ChatFriendList extends JFrame {
       {
         
          public void mouseClicked(MouseEvent e) {
-        	 contentPane_1.setVisible(true);
-        	 chatPanel.setVisible(false);
-        	 
+            contentPane_1.setVisible(true);
+            chatPanel.setVisible(false);
+            
            }
       }
       
@@ -179,13 +186,13 @@ public class ChatFriendList extends JFrame {
       {
         
          public void mouseClicked(MouseEvent e) {
-        	 contentPane_1.setVisible(false);
-        	 chatPanel.setVisible(true);
-        	 contentPane.add(chatPanel);
-        	 JLabel dd = new JLabel("dd?????");
-        	 dd.setSize(50,50);
-        	 dd.setLocation(150,150);
-        	 chatPanel.add(dd);
+            contentPane_1.setVisible(false);
+            chatPanel.setVisible(true);
+            contentPane.add(chatPanel);
+            JLabel dd = new JLabel("dd?????");
+            dd.setSize(50,50);
+            dd.setLocation(150,150);
+            chatPanel.add(dd);
            }
      
       }
@@ -238,14 +245,115 @@ public class ChatFriendList extends JFrame {
       friendImgPanel.add(label_1);
       
       userListLabel = new JLabel("");
-      userListLabel.setBounds(66, 280, 178, 148);
+      userListLabel.setBounds(68, 432, 178, 42);
       contentPane_1.add(userListLabel);
       
+      userListPanel = new JPanel();
+      userListPanel.setBounds(12, 183, 287, 238);
+      userListPanel.setLayout(null);
+      contentPane_1.add(userListPanel);
+      
+      
+      class SendNameList extends MouseAdapter {
+    	  //private static final String ListPanel = null;
+
+		public void mouseClicked(MouseEvent e) {
+    		  ChatMsg chatMsg=null;
+    		  chatMsg = new ChatMsg(UserName,"500","send selected string list");
+    		  chatMsg.i = i;
+    		  selectedNameList.add(UserName);
+    		  sendSelectedNameList=selectedNameList;
+    		  chatMsg.setList(sendSelectedNameList);
+    		  
+    		 System.out.println(chatMsg.getList());
+    		// System.out.println(chatMsg+" "+chatMsg.al);
+    		 i++;
+    		  //보냄
+    		  SendObject(chatMsg); 
+    		  sendSelectedNameList.clear();
+    		  
+    		  for(int j=0;j<userOneListPanel.size();j++) {
+    		  userOneListPanel.get(j).getCheckBox().setSelected(false);
+    		  
+    		  }
+    		  chatMsg=null;
+    		  selectedNameList.clear();
+    		//  (ListPanel)userListPanel.getCompontent(0);
+    	  }
+    	  
+      }
+      
+      testButton = new JButton("단톡방");
+      testButton.setBounds(208, 149, 91, 23);
+      contentPane_1.add(testButton);
+      SendNameList sendName = new SendNameList();
+      testButton.addMouseListener(sendName);
       
       
      
    }
+  public class CheckAction implements ItemListener{
+	  String userName;
+	public CheckAction(String name) {
+		this.userName= name;
+	}
+	  @Override
+	public void itemStateChanged(ItemEvent e) {
+		// TODO Auto-generated method stub
+		switch(e.getStateChange()) {
+		case 1:
+			//선택이 됐으면 선택된 사람의 이름 보내기
+			selectedNameList.add(userName);
+			System.out.println(selectedNameList);
+			break;
+		case 2:
+			selectedNameList.remove(userName);
+			System.out.println(selectedNameList);
+			break;
+		}
+	}
+	  
+  }
+  public class PicturePanel extends JPanel{
+	  public PicturePanel() {
+		  ImageIcon icon = new ImageIcon("src/basicProfileImg.jpg");
+	      Image img = icon.getImage();
+	      Image changeImg = img.getScaledInstance(41,41, Image.SCALE_SMOOTH);
+	      ImageIcon changeIcon = new ImageIcon(changeImg);
+	      JLabel picturelabel = new JLabel(changeIcon);
+	      
+	      this.add(picturelabel);
+	      
+	  }
+	  
+  }
+  public class ListPanel extends JPanel{
+	  		JCheckBox checkBox;
+		   public ListPanel(JLabel userNameLabel,int y,String name) {
+			   this.setLayout(new GridLayout(1,3));
+			   PicturePanel picturePanel = new PicturePanel();
+			   
+			   this.add(picturePanel);
+			   picturePanel.addMouseListener(new MouseAdapter() {
+				    public void mouseClicked(MouseEvent e) {
+					   System.out.println("asf");			   
+				   }			   
+			   });
+			   this.add(userNameLabel);
+			   this.setSize(280,60);
+			   this.setLocation(0,y);
+			   
+			   this.checkBox = new JCheckBox();
+			   CheckAction checkAction= new CheckAction(name);
+			   checkBox.addItemListener(checkAction);
+			   this.add(checkBox);
+		   }
+		   public JCheckBox getCheckBox() {
+			   return this.checkBox;
+		   }
+	   }
    class EnterUserNetwork extends Thread {
+	   
       public void run() {
          while (true) {
             try {
@@ -271,16 +379,88 @@ public class ChatFriendList extends JFrame {
                      case "100":
                     
                         // 유저배열에 새로 들어온 유저를 추가함
-                        userNameList.add(cm.UserName);
-                        String str = String.join(",", userNameList);
-                         userListLabel.setText(str);
+                       // userNameList.add(cm.UserName);
+                        //String str = String.join(",", userNameList);
+                        // userListLabel.setText(str);
                          
                         // obcm = new ChatMsg(UserName, "101", str); // 유저 리스트를 보냄 
                            
                           // SendObject(obcm);//send
+                         break;
                          
                      case "101": // 유저 리스트 받았다면
                         userListLabel.setText(cm.data);
+                        //String userListStr = cm.data;
+                        //String userListStr = "user1, user2, user3, user4";
+                       // System.out.println(cm.data);
+                        String[] userListString= cm.data.split(",");
+                        
+                      //  System.out.println(Arrays.toString(userListString));
+                        
+                        		 ListPanel userOnePanel;
+                                 JLabel userOneLabel;
+                                 userListPanel.removeAll();
+//                                 userListPanel.revalidate();
+//                                 userListPanel.repaint();
+                                 int j=0;
+                                 for (int i=0; i<userListString.length; i++) {
+                                   // System.out.println(userListString[i]);
+                                    if(!UserName.equals(userListString[i])) {
+                                        userOneLabel = new JLabel();
+                                        userOneLabel.setText(userListString[i]);
+                                        userOnePanel = new ListPanel(userOneLabel,j*60,userListString[i]);                                                                              
+                                        userOnePanel.setBorder(BorderFactory.createLineBorder(Color.black));
+                                        j++;
+                                        userListPanel.add(userOnePanel);//위치 for문  돌면서 밑으로 내려가게 함. 
+                                       userOneListPanel.add(userOnePanel);
+                                        	
+                                        
+                                    }
+                                   
+                                }
+                                 userListPanel.revalidate();
+                                 userListPanel.repaint();
+                       
+                       break;
+                       
+ 
+                                /* testButton.addActionListener(new ActionListener() {
+                                    public void actionPerformed(ActionEvent e) {
+                                       JPanel userOnePanel;
+                                         JLabel userOneLabel;
+                                         for (int i=0; i<userListString.length; i++) {
+                                            System.out.println(userListString[i]);
+                                            
+                                            userOnePanel = new JPanel();
+                                             
+                                             userOneLabel = new JLabel();
+                                             userListPanel.add(userOnePanel);
+                                             userOnePanel.add(userOneLabel);
+                                           
+                                             userOneLabel.setText(userListString[i]);
+                                        }
+                                 
+                                    }
+                                 }); */
+                                 
+                        
+                         /* userOnePanel = new JPanel();
+                          
+                          userOneLabel = new JLabel(); 
+                          userListPanel.add(userOnePanel);
+                          userOnePanel.add(userOneLabel);
+                          
+                          userOneLabel.setText(" ");
+                          userOneLabel.setText(userListString[0]);*/
+                                 
+                          
+                          
+                         
+                                 
+                            
+                         
+                      
+                        
                         
                         
                         
@@ -346,7 +526,9 @@ public class ChatFriendList extends JFrame {
    
    public void SendObject(Object ob) { // 서버로 메세지를 보내는 메소드
       try {
+
          oos.writeObject(ob);
+         oos.reset();
       } catch (IOException e) {
          // textArea.append("메세지 송신 에러!!\n");
          AppendText("SendObject Error");

@@ -15,7 +15,8 @@ class ChatMsg implements Serializable {
 	public ImageIcon img;
 	public MouseEvent mouse_e;
 	public int pen_size; // pen size
-	public ArrayList al;
+	public ArrayList<String> al;
+	public int i;
 	public ChatMsg(String UserName, String code, String msg) {
 		this.code = code;
 		this.UserName = UserName;
@@ -23,5 +24,11 @@ class ChatMsg implements Serializable {
 	}
 	public void setList(ArrayList<String> al) {
 		this.al = al;
+		System.out.println(al);
+	}
+	
+	public Object getList() {
+		// TODO Auto-generated method stub
+		return al;
 	}
 }
