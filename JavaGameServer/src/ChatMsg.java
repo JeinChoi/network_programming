@@ -16,6 +16,7 @@ class ChatMsg implements Serializable {
 	public int pen_size; // pen size
 	public ArrayList<String> al;
 	public int i;
+	public int multiChatNum;
 	public ChatMsg(String UserName, String code, String msg) {
 		this.code = code;
 		this.UserName = UserName;

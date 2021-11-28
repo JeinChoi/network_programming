@@ -23,6 +23,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
@@ -37,11 +40,15 @@ public class JavaGameServer extends JFrame {
    private JPanel contentPane;
    JTextArea textArea;
    private JTextField txtPortNumber;
-
+   int multiChatNum =0; // 단톡방 번호
    private ServerSocket socket; // 서버소켓
    private Socket client_socket; // accept() 에서 생성된 client 소켓
    private Vector UserVec = new Vector(); // 연결된 사용자를 저장할 벡터
    private static final int BUF_LEN = 128; // Windows 처럼 BUF_LEN 을 정의
+   Map<Integer,ArrayList<String>> multiChatNumNmems= new HashMap<>();
+   Map<String,ObjectOutputStream> clientsOutputStream = new HashMap<String,ObjectOutputStream>();
+   
+   String invitedUsersStr; // 하나의 단톡방에 초대된 사람들 리스트
 
    /**
     * Launch the application.
@@ -175,7 +182,8 @@ public class JavaGameServer extends JFrame {
             oos = new ObjectOutputStream(client_socket.getOutputStream());
             oos.flush();
             ois = new ObjectInputStream(client_socket.getInputStream());
-
+            //여기다가 dataoutputstream과 username을 받자.
+            clientsOutputStream.put(UserName,oos);
 
          } catch (Exception e) {
             AppendText("userService error");
@@ -207,6 +215,11 @@ public class JavaGameServer extends JFrame {
             //if (user.UserStatus == "O")
                user.WriteOne(str);
          }
+         if(str=="550") { // 단톡방 생성 코드라면 방 번호 1씩 증가
+           multiChatNum++;
+           
+         }
+            
       }
       // 모든 User들에게 Object를 방송. 채팅 message와 image object를 보낼 수 있다
       public void WriteAllObject(Object ob) {
@@ -262,6 +275,13 @@ public class JavaGameServer extends JFrame {
                
                ChatMsg obcm = new ChatMsg("SERVER", "101", userNameListStr);
                oos.writeObject(obcm);
+            }
+            
+            if(msg.matches("550")) { // 일단 모두에게 단톡방에 초대된 사람들 리스트 보내기
+                ChatMsg obcm = new ChatMsg("SERVER", "550", invitedUsersStr);
+                obcm.multiChatNum=multiChatNum; //ChatMsg에 multiChatNum 설정
+                
+                 oos.writeObject(obcm); // 클라이언트에게 보냄
             }
             else {
                ChatMsg obcm = new ChatMsg("SERVER", "200", msg);
@@ -336,7 +356,20 @@ public class JavaGameServer extends JFrame {
             }
          }
       }
-      
+      public void sendMessage(ChatMsg cm,ArrayList<String> chatMem) {
+         for(int i=0;i<chatMem.size();i++) {
+            String chatMemName = chatMem.get(i);        
+            for(int j=0;j<user_vc.size();j++) {
+               UserService user = (UserService) user_vc.elementAt(j);
+               if((user.UserName).equals(chatMemName)) {
+                 // cm.code="220";
+                  user.WriteOneObject(cm);                  
+               }
+            }
+         }
+         
+        
+      }
       public void run() {
          while (true) { // 사용자 접속을 계속해서 받기 위해 while문
             try {
@@ -374,17 +407,41 @@ public class JavaGameServer extends JFrame {
                else if(cm.code.matches("101")){
                
                }
-               else if(cm.code.matches("500")) {
-            	   //list 받아와서 출력
-            	  // ArrayList<String> temp = new ArrayList<String>();
-            	   //temp = cm.al;
-            	   System.out.println("list도착"+cm.al+" cm.i "+cm.i);
-            	  // cm.al.clear();
-            	   //chatList.add(cm);
-            	   //System.out.println(chatList);
-            	   //if(chatList.size()>=2)
-            		   //System.out.println((chatList.get(0)).equals(chatList.get(1)));
-            	   
+               else if(cm.code.matches("500")) { // 단톡방에 초대됐다면
+                  // 단톡방에 초대된 사람 리스트: cm.al, 단톡방 아디: i
+          
+                
+                  
+                  AppendText("단톡방 생성 id:"+cm.i+"/유저들:"+cm.al);
+                
+                  // userNameList: a,b,c,
+                  // cm.al:  a, b
+                  
+             
+                  //여기서 단톡방 생성해줘야함. 
+                  multiChatNumNmems.put(multiChatNum, cm.al); //서버에서 단톡방을 관리하기 위해서 방 넘버와 리스트를 추가함
+                //al에 있는 userName 비교하면서 hashmap을 filter한 뒤에 전송
+                 
+                  MultiChat multiChat = new MultiChat(multiChatNum,cm.al);//number랑 list 전송
+           
+                 //만약에 580으로 msg올때 그 메시지 안에는 num와 al이 있어야함. 
+                  invitedUsersStr = String.join(",", cm.al);
+                  //multichat도 보내야되고 multiChatNum도 보내야함.
+                  WriteAll("550"); // 모두에게 일단 550 보낸다. 
+                  
+                  
+               }
+               else if(cm.code.matches("210")) {//단톡방에서 온 메시지 chatmembers에 전송
+                 ArrayList<String> chatmems =multiChatNumNmems.get(cm.multiChatNum);
+                 //multichatnum에 맞는 유저들을 가져옴 리스트로.
+                 
+                 sendMessage(cm,chatmems);
+               }
+               else if(cm.code.matches("580")) {
+                  //단톡방 유저 확인하고  서버에 메시지 처리하고 그거를 또 객체에 보내야함. 
+                  //a.sendMsg(msg); a. sendMsg(number,list);
+           
+                  
                }
                else if (cm.code.matches("200")) {
                   msg = String.format("[%s] %s", cm.UserName, cm.data);
@@ -430,10 +487,16 @@ public class JavaGameServer extends JFrame {
                      WriteAllObject(cm);
                   }
                } 
+               else if(cm.code.matches("300")) {
+                  ArrayList<String> chatmems =multiChatNumNmems.get(cm.multiChatNum);
+                  
+                  sendMessage(cm,chatmems);
+               }
                else if (cm.code.matches("400")) { // logout message 처리
                   Logout();
                   break;
                }
+              
                else { // 300, 500, ... 기타 object는 모두 방송한다.
                   WriteAllObject(cm);
                } 
