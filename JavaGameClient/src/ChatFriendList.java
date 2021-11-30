@@ -316,6 +316,9 @@ public class ChatFriendList extends JFrame {
       
       ImageIcon inviteImg = new ImageIcon("src/newRoomImg.png");
       testButton = new JButton(inviteImg);
+      testButton.setBorderPainted(false);
+      testButton.setContentAreaFilled(false);
+      testButton.setFocusPainted(false);
       testButton.setBounds(253, 150, 30, 30);
       contentPane_1.add(testButton);
       SendNameList sendName = new SendNameList();
@@ -386,35 +389,35 @@ public class ChatFriendList extends JFrame {
      
   }
 
-  class ChatPanelEvent extends MouseAdapter{	  
-	  int multiChatNum;
-	  public ChatPanelEvent(int multiChatNum) {
-		  this.multiChatNum = multiChatNum;				  
-	  }
-	  @Override
-	  public void mouseClicked(MouseEvent e) {
-		  for(int i=0;i<myMultiChat.size();i++) {
-          	if(myMultiChat.get(i).multiNum==multiChatNum) {
-          		myMultiChat.get(i).setVisible(true);
-          		System.out.println("멀티채팅번호"+multiChatNum);
-          	}
-		  }
+  class ChatPanelEvent extends MouseAdapter{     
+     int multiChatNum;
+     public ChatPanelEvent(int multiChatNum) {
+        this.multiChatNum = multiChatNum;              
+     }
+     @Override
+     public void mouseClicked(MouseEvent e) {
+        for(int i=0;i<myMultiChat.size();i++) {
+             if(myMultiChat.get(i).multiNum==multiChatNum) {
+                myMultiChat.get(i).setVisible(true);
+                System.out.println("멀티채팅번호"+multiChatNum);
+             }
+        }
    }
  }
   public class OneChatRoomPanel extends JPanel{
-	  int multiChatNum;
-	  MultiChat multiChat;
-	  public OneChatRoomPanel(int multiChatNum,MultiChat multiChat) {
-		  this.multiChatNum = multiChatNum;
-		  ChatPanelEvent chatPanelEvent = new ChatPanelEvent(multiChatNum);
-		  this.addMouseListener(chatPanelEvent);
-	  }
-	  int getMultiChatNum() {
-		  return multiChatNum;
-	  }
-			  		  	
+     int multiChatNum;
+     MultiChat multiChat;
+     public OneChatRoomPanel(int multiChatNum,MultiChat multiChat) {
+        this.multiChatNum = multiChatNum;
+        ChatPanelEvent chatPanelEvent = new ChatPanelEvent(multiChatNum);
+        this.addMouseListener(chatPanelEvent);
+     }
+     int getMultiChatNum() {
+        return multiChatNum;
+     }
+                      
   }
-	
+   
   
   public class ListPanel extends JPanel{
            JCheckBox checkBox;
@@ -525,15 +528,15 @@ public class ChatFriendList extends JFrame {
                         
                         myMultiChat.add(multiChat);
                         for(int i=0;i<myMultiChat.size();i++) {
-                        	System.out.print(myMultiChat.get(i).multiNum+" ");
+                           System.out.print(myMultiChat.get(i).multiNum+" ");
                         }
-                     	System.out.println("패널리스트");
+                        System.out.println("패널리스트");
                         
                         OneChatRoomPanel oneChatRoomPanel = new OneChatRoomPanel(cm.multiChatNum,multiChat);
                         for(int i=0;i<oneChatRoomPanelList.size();i++) {
-                        	System.out.print(oneChatRoomPanelList.get(i).getMultiChatNum()+" ");
+                           System.out.print(oneChatRoomPanelList.get(i).getMultiChatNum()+" ");
                         }
-                     	System.out.println("");
+                        System.out.println("");
                         for(int i=0; i<invitedUsersArr.length; i++) { // 초대된 유저들을 돌면서 
                            if(UserName.equals(invitedUsersArr[i])) { // 자기 자신이 그 중 포함되어 있으면 단톡방을 추가한다. 
                               myRoomNum++;
@@ -586,10 +589,17 @@ public class ChatFriendList extends JFrame {
                         
                          break;
                      case "300": // Image 첨부
+                        
+                        //Image image = cm.img.getImage();
+                         
+                        // image.getScaledInstance(40,40,Image.SCALE_SMOOTH);
+                         //cm.img.setImage(image);
+                         
                          for(int i=0;i<myMultiChat.size();i++) {//유저가 가지고 있는 멀티챗방중에 어떤 챗방에서 메시지가 온건지 확인
                             MultiChat findMultiRoom = myMultiChat.get(i);
                             if(findMultiRoom.getMultiNum()==cm.multiChatNum) {
                               
+                               
                                if (cm.UserName.equals(UserName)) {
                                   findMultiRoom.AppendTextR("[" + cm.UserName + "]");
                                   findMultiRoom.AppendImage(cm.img);

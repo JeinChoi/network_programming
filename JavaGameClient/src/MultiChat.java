@@ -36,10 +36,11 @@ public class MultiChat extends JFrame{
     private JLabel lblUserName;
     private Frame frame;
     private FileDialog fd;
+    private MultiChat multiChat;
     
     JPanel panel;
     
-    private Graphics gc;
+    //private Graphics gc;
    private int pen_size = 2; // minimum 2
    // 그려진 Image를 보관하는 용도, paint() 함수에서 이용한다.
    private Image panelImage = null; 
@@ -69,36 +70,48 @@ public class MultiChat extends JFrame{
           }
        }
     }
-   class ImageSendAction implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// 액션 이벤트가 sendBtn일때 또는 textField 에세 Enter key 치면
-			if (e.getSource() == imgBtn) {
-				frame = new Frame("이미지첨부");
-				fd = new FileDialog(frame, "이미지 선택", FileDialog.LOAD);
-				// frame.setVisible(true);
-				// fd.setDirectory(".\\");
-				fd.setVisible(true);
-				// System.out.println(fd.getDirectory() + fd.getFile());
-				if (fd.getDirectory().length() > 0 && fd.getFile().length() > 0) {
-					ChatMsg obcm = new ChatMsg(username, "300", "IMG");
-					ImageIcon img = new ImageIcon(fd.getDirectory() + fd.getFile());
-					obcm.img = img;
-					obcm.multiChatNum=multiNum;
-		             
-					chatFriendList.SendObject(obcm);
-				}
-			}
-		}
-	}
+   class ImageSendAction implements ActionListener { // 이미지 보내기 
+      @Override
+      public void actionPerformed(ActionEvent e) {
+         // 액션 이벤트가 sendBtn일때 또는 textField 에세 Enter key 치면
+         if (e.getSource() == imgBtn) {
+            frame = new Frame("이미지첨부");
+            fd = new FileDialog(frame, "이미지 선택", FileDialog.LOAD);
+            // frame.setVisible(true);
+            // fd.setDirectory(".\\");
+            fd.setVisible(true);
+            // System.out.println(fd.getDirectory() + fd.getFile());
+            if (fd.getDirectory().length() > 0 && fd.getFile().length() > 0) {
+               ChatMsg obcm = new ChatMsg(username, "300", "IMG"); // 코드 300과 함께 이미지 보냄 
+               ImageIcon img = new ImageIcon(fd.getDirectory() + fd.getFile());
+               System.out.println(fd.getDirectory() + fd.getFile());
+               obcm.img = img;
+               obcm.multiChatNum=multiNum;
+                   
+               chatFriendList.SendObject(obcm);
+            }
+         }
+      }
+   }
+   
+   class EmoticonSendAction implements ActionListener { // 이모티콘 보내기 
+         @Override
+         public void actionPerformed(ActionEvent e) {
+            
+            System.out.println("이모티콘 버튼 눌림");
+            Emoticon emoticon = new Emoticon(username, multiNum, chatFriendList);
+            emoticon.setVisible(true);
+            
+         }
+      }
 
+   
    public MultiChat(String username, int multiNum,String [] invitedFriendsArr,ChatFriendList chatFriendList) {
       this.chatFriendList = chatFriendList;
       this.username = username; 
       this.multiNum = multiNum;
       this.invitedFriendsArr = invitedFriendsArr;
-   
-       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      multiChat = this;
          setSize(416,634);
          setBounds(100, 100, 390, 634);
          JPanel contentPane = new JPanel();
@@ -120,16 +133,16 @@ public class MultiChat extends JFrame{
       
 
        txtInput = new JTextField();
-       txtInput.setBounds(74, 489, 209, 40);
+       txtInput.setBounds(89, 501, 209, 30);
        contentPane.add(txtInput);
        txtInput.setColumns(10);
      
        Color yellowColor=new Color(254,240,27);  
        
      
-       btnSend = new JButton("Send");
-       btnSend.setFont(new Font("굴림", Font.PLAIN, 14));
-       btnSend.setBounds(295, 489, 69, 40);
+       btnSend = new JButton("\uC804\uC1A1");
+       btnSend.setFont(new Font("굴림", Font.PLAIN, 12));
+       btnSend.setBounds(310, 501, 54, 30);
        contentPane.add(btnSend);
        
        btnSend.setBackground(yellowColor);
@@ -143,10 +156,10 @@ public class MultiChat extends JFrame{
        lblUserName.setBackground(Color.WHITE);
        lblUserName.setFont(new Font("굴림", Font.BOLD, 14));
        lblUserName.setHorizontalAlignment(SwingConstants.CENTER);
-       lblUserName.setBounds(12, 539, 62, 40);
+       lblUserName.setBounds(161, 539, 62, 40);
        contentPane.add(lblUserName);
-       setVisible(true);
-
+       this.setVisible(true);
+       
        //AppendText("User " + username + " connecting " + ip_addr + " " + port_no);
        //UserName = username;
        lblUserName.setText(username);
@@ -156,49 +169,50 @@ public class MultiChat extends JFrame{
        String invitedFriendsString = String.join(",", invitedFriendsArr);
        AppendText(invitedFriendsString+"님이 초대되었습니다.");
        
-
-       imgBtn = new JButton("+");
+       ImageIcon addImageIcon = new ImageIcon("src/imageBtn.png");
+       Image tempImgIcon = addImageIcon.getImage();
+       Image changeAddImageIcon = tempImgIcon.getScaledInstance(40,30,Image.SCALE_SMOOTH);
+       ImageIcon newAddImageIcon = new ImageIcon(changeAddImageIcon);
+       imgBtn = new JButton(newAddImageIcon);
+       imgBtn.setBorderPainted(false);
+       imgBtn.setContentAreaFilled(false);
+       imgBtn.setFocusPainted(false);
        imgBtn.setFont(new Font("굴림", Font.PLAIN, 16));
-       imgBtn.setBounds(12, 489, 50, 40);
+       imgBtn.setBounds(12, 501, 40, 30);
        contentPane.add(imgBtn);
-       imgBtn.setBackground(yellowColor);
+       //imgBtn.setBackground(yellowColor);
        ImageSendAction action2 = new ImageSendAction();
-		imgBtn.addActionListener(action2);
-
-       JButton btnNewButton = new JButton("종 료");
-       btnNewButton.setBackground(yellowColor);
-       btnNewButton.setFont(new Font("굴림", Font.PLAIN, 14));
-       btnNewButton.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent e) {
-             //ChatMsg msg = new ChatMsg(UserName, "400", "Bye");
-             //SendObject(msg);
-             System.exit(0);
-          }
-          
-    
-          
-          
-       });
-       btnNewButton.setBounds(295, 539, 69, 40);
-       contentPane.add(btnNewButton);
+      imgBtn.addActionListener(action2);
        
        panel = new JPanel();
-		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel.setBackground(Color.WHITE);
-		panel.setBounds(376, 10, 400, 520);
-		contentPane.add(panel);
-		gc = panel.getGraphics();
-		
-		// Image 영역 보관용. paint() 에서 이용한다.
-		panelImage = createImage(panel.getWidth(), panel.getHeight());
-		gc2 = panelImage.getGraphics();
-		gc2.setColor(panel.getBackground());
-		gc2.fillRect(0,0, panel.getWidth(),  panel.getHeight());
-		gc2.setColor(Color.BLACK);
-		gc2.drawRect(0,0, panel.getWidth()-1,  panel.getHeight()-1);
-		
+      panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+      panel.setBackground(Color.WHITE);
+      panel.setBounds(376, 10, 400, 520);
+      contentPane.add(panel);
+      
+      ImageIcon emoticonBtnIcon = new ImageIcon("src/emoticonBtn.png");
+      JButton emoticonBtn = new JButton(emoticonBtnIcon); // 이모티콘 버튼
+      emoticonBtn.setBorderPainted(false);
+      emoticonBtn.setContentAreaFilled(false);
+      emoticonBtn.setFocusPainted(false);
+      emoticonBtn.setBounds(49, 501, 40, 30);
+      contentPane.add(emoticonBtn);
+      
+      EmoticonSendAction action3 = new EmoticonSendAction();
+      emoticonBtn.addActionListener(action3);
+      
+     // gc = panel.getGraphics();
+      
+      // Image 영역 보관용. paint() 에서 이용한다.
+      panelImage = createImage(panel.getWidth(), panel.getHeight());
+      gc2 = panelImage.getGraphics();
+      gc2.setColor(panel.getBackground());
+      gc2.fillRect(0,0, panel.getWidth(),  panel.getHeight());
+      gc2.setColor(Color.BLACK);
+      gc2.drawRect(0,0, panel.getWidth()-1,  panel.getHeight()-1);
+      
     
-      setVisible(false);
+      
     
   
    }
@@ -227,11 +241,11 @@ public class MultiChat extends JFrame{
       }
 
    }
-	public void paint(Graphics g) {
-		super.paint(g);
-		// Image 영역이 가려졌다 다시 나타날 때 그려준다.
-		gc.drawImage(panelImage, 0, 0, this);
-	}
+   public void paint(Graphics g) {
+      super.paint(g);
+      // Image 영역이 가려졌다 다시 나타날 때 그려준다.
+      //gc.drawImage(panelImage, 0, 0, this);
+   }
    
    
    public void AppendTextR(String msg) {
@@ -251,7 +265,12 @@ public class MultiChat extends JFrame{
    }
    
 public void AppendImage(ImageIcon ori_icon) {
-	   
+      
+   Image image = ori_icon.getImage();
+    
+    image.getScaledInstance(40,40,Image.SCALE_SMOOTH);
+    ori_icon.setImage(image);
+    
        int len = textArea.getDocument().getLength();
        textArea.setCaretPosition(len); // place caret at the end (with no selection)
        Image ori_img = ori_icon.getImage();
@@ -289,10 +308,4 @@ public void AppendImage(ImageIcon ori_icon) {
        gc2.drawImage(ori_img,  0,  0, panel.getWidth(), panel.getHeight(), panel);
        //gc.drawImage(panelImage, 0, 0, panel.getWidth(), panel.getHeight(), panel);
     }
- 
-   
-   
-   
-   
-   
 }

@@ -1,5 +1,6 @@
 
 // ChatMsg.java 채팅 메시지 ObjectStream 용.
+import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,7 +28,6 @@ class ChatMsg implements Serializable {
 	}
 	public void setList(ArrayList<String> al) {
 		this.al = al;
-		System.out.println(al);
 	}
 	
 	public Object getList() {

@@ -423,7 +423,7 @@ public class JavaGameServer extends JFrame {
                 //al에 있는 userName 비교하면서 hashmap을 filter한 뒤에 전송
                  
                   MultiChat multiChat = new MultiChat(multiChatNum,cm.al);//number랑 list 전송
-           
+                  
                  //만약에 580으로 msg올때 그 메시지 안에는 num와 al이 있어야함. 
                   invitedUsersStr = String.join(",", cm.al);
                   //multichat도 보내야되고 multiChatNum도 보내야함.
@@ -489,7 +489,7 @@ public class JavaGameServer extends JFrame {
                } 
                else if(cm.code.matches("300")) {
                   ArrayList<String> chatmems =multiChatNumNmems.get(cm.multiChatNum);
-                  
+                  System.out.println("이모티콘보냄"+cm.img);
                   sendMessage(cm,chatmems);
                }
                else if (cm.code.matches("400")) { // logout message 처리

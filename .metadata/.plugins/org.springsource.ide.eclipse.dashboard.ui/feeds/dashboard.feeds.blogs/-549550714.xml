@@ -5,7 +5,307 @@
   <link rel="self" href="https://spring.io/blog.atom" />
   <id>http://spring.io/blog.atom</id>
   <icon>https://spring.io/favicon.ico</icon>
-  <updated>2021-11-25T09:00:00Z</updated>
+  <updated>2021-11-29T17:11:25Z</updated>
+  <entry>
+    <title>Security Report for Spring AMQP (Spring for RabbitMQ)</title>
+    <link rel="alternate" href="https://spring.io/blog/2021/11/29/security-report-for-spring-amqp-spring-for-rabbitmq" />
+    <category term="engineering" label="Engineering" />
+    <author>
+      <name>Gary Russell</name>
+    </author>
+    <id>tag:spring.io,2021-11-29:4624</id>
+    <updated>2021-11-29T17:11:25Z</updated>
+    <content type="html">&lt;div class="paragraph"&gt;
+&lt;p&gt;The recently released versions of Spring AMQP (2.4.0, 2.3.12, 2.2.20) contain a fix for &lt;a href="https://tanzu.vmware.com/security/cve-2021-22095"&gt;CVE-2021-22095&lt;/a&gt;, which can cause a potential &lt;code&gt;OutOfMemoryError&lt;/code&gt; for very large messages.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Spring Boot version 2.6.0 and 2.5.7 will bring in the 2.4.0 and 2.3.12 versions of spring-amqp respectively. Users of Boot 2.4.x should override the &lt;code&gt;spring-amqp&lt;/code&gt; and &lt;code&gt;spring-rabbit&lt;/code&gt; versions to 2.3.12; users of Spring Boot 2.3.x should override the versions to 2.2.20.&lt;/p&gt;
+&lt;/div&gt;
+&lt;!-- rendered by Sagan Renderer Service --&gt;</content>
+  </entry>
+  <entry>
+    <title>Spring Boot 2.6.1 is now available</title>
+    <link rel="alternate" href="https://spring.io/blog/2021/11/29/spring-boot-2-6-1-is-now-available" />
+    <category term="releases" label="Releases" />
+    <author>
+      <name>Andy Wilkinson</name>
+    </author>
+    <id>tag:spring.io,2021-11-29:4623</id>
+    <updated>2021-11-29T13:49:03Z</updated>
+    <content type="html">&lt;p&gt;On behalf of the team and everyone who has contributed, I&amp;rsquo;m happy to announce that Spring Boot &lt;code&gt;2.6.1&lt;/code&gt; has been released and is now available from Maven Central.&lt;/p&gt;
+&lt;p&gt;This release includes &lt;a href="https://github.com/spring-projects/spring-boot/releases/tag/v2.6.1"&gt;11 bug fixes and documentation improvements&lt;/a&gt;. Thanks to all those who have contributed with issue reports and pull requests.&lt;/p&gt;&lt;h3&gt;&lt;a href="#how-can-you-help" class="anchor" name="how-can-you-help"&gt;&lt;/a&gt;How can you help?&lt;/h3&gt;
+&lt;p&gt;If you&amp;rsquo;re interested in helping out, check out the &lt;a href="https://github.com/spring-projects/spring-boot/labels/status%3A%20ideal-for-contribution"&gt;&amp;ldquo;ideal for contribution&amp;rdquo; tag&lt;/a&gt; in the issue repository. If you have general questions, please ask on &lt;a href="https://stackoverflow.com"&gt;stackoverflow.com&lt;/a&gt; using the &lt;a href="https://stackoverflow.com/tags/spring-boot"&gt;&lt;code&gt;spring-boot&lt;/code&gt; tag&lt;/a&gt; or chat with the community on &lt;a href="https://gitter.im/spring-projects/spring-boot"&gt;Gitter&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://spring.io/projects/spring-boot/"&gt;Project Page&lt;/a&gt; | &lt;a href="https://github.com/spring-projects/spring-boot"&gt;GitHub&lt;/a&gt; | &lt;a href="https://github.com/spring-projects/spring-boot/issues"&gt;Issues&lt;/a&gt; | &lt;a href="https://docs.spring.io/spring-boot/docs/2.6.1/reference/html"&gt;Documentation&lt;/a&gt; | &lt;a href="https://stackoverflow.com/questions/tagged/spring-boot"&gt;Stack Overflow&lt;/a&gt; | &lt;a href="https://gitter.im/spring-projects/spring-boot"&gt;Gitter&lt;/a&gt;&lt;/p&gt;
+&lt;!-- rendered by Sagan Renderer Service --&gt;</content>
+  </entry>
+  <entry>
+    <title>Spring Data MongoDB - Relation Modelling</title>
+    <link rel="alternate" href="https://spring.io/blog/2021/11/29/spring-data-mongodb-relation-modelling" />
+    <category term="engineering" label="Engineering" />
+    <author>
+      <name>Christoph Strobl</name>
+    </author>
+    <id>tag:spring.io,2021-11-05:4595</id>
+    <updated>2021-11-29T09:30:00Z</updated>
+    <content type="html">&lt;div class="paragraph"&gt;
+&lt;p&gt;MongoDB&amp;#8217;s flexible schema allows for multiple patterns when it comes to modeling relationships between entities. Also, for many use cases, a denormalized data model (storing related data right within a single document) might be the best choice, because all information is kept in one place, so that the application requires fewer queries to fetch all data. However, this approach also has its downsides, such as potential data duplication, larger documents, and the maximum document size.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;In general, MongoDB recommends using normalized data models when the advantages of embedding are neglected by the implications of duplication. In this blog post, we take a look at the different possibilities of linking documents with &lt;em&gt;manual references&lt;/em&gt; and &lt;em&gt;DBRefs&lt;/em&gt; when the need occurs to work with relations.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;&lt;em&gt;DBRef&lt;/em&gt; is MongoDB&amp;#8217;s native element to express references to other documents with an explicit format &lt;code&gt;{ $db : ・, $ref : ・, $id : ・ }&lt;/code&gt; that holds information about the target &lt;em&gt;database&lt;/em&gt;, &lt;em&gt;collection&lt;/em&gt;, and &lt;em&gt;id&lt;/em&gt; value of the references element, best suited to link to documents distributed across different collections.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;&lt;em&gt;Manual references&lt;/em&gt;, on the other hand, are simpler in structure (by storing only the &lt;em&gt;id&lt;/em&gt; of the referenced document), but are, therefore, not as flexible when it comes to mixed collection references.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Having set the terminology, let¨s introduce well known domain types, such as &lt;code&gt;Book&lt;/code&gt; and &lt;code&gt;Publisher&lt;/code&gt;, and their obvious relation to one another:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="prettyprint highlight"&gt;&lt;code data-lang="java"&gt;class Book {
+    private String isbn13;
+    private String title;
+    private int pages;
+}
+
+class Publisher {
+    private String name;
+    private String arconym;
+    private int foundationYear;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Embedding the &lt;code&gt;Publisher&lt;/code&gt; within each and every &lt;code&gt;Book&lt;/code&gt; is not an appealing option, as it would lead to data duplication and put an unnecessary burden on storage and maintainability:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="prettyprint highlight"&gt;&lt;code data-lang="java"&gt;class Book {
+    // ...
+    private Publisher publisher;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Though this storage format allows for atomic updates and offers the most flexibility when it comes to querying for specific attributes, the repetition of the &lt;code&gt;Publisher&lt;/code&gt; information, as shown in the snippet below, might not be worth this cost:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="prettyprint highlight"&gt;&lt;code data-lang="javascript"&gt;{
+    "_id" : "617cfb",
+    "isbn13" : "978-0345503800",
+    "title" : "The Warded Man",
+    "pages" : 432,
+    "publisher" : {
+        "name" : "Del Rey Books",
+        "arconym" : "DRB",
+        "foundationYear" : 1977
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;The same goes for embedding a collection of &lt;code&gt;Books&lt;/code&gt; within the &lt;code&gt;Publisher&lt;/code&gt;, which causes unnecessarily large documents.
+Normalizing the model and working with linked documents can mitigate the issue.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;A first step is to determine the direction of the relation, to figure out which part of the relation needs to hold the reference, if not both. This decision will influence our lookup, storage, and query options available later on.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="sect2"&gt;
+&lt;h3 id="linking-with-dbrefs"&gt;&lt;a class="anchor" href="#linking-with-dbrefs"&gt;&lt;/a&gt;Linking with DBRefs&lt;/h3&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;In this case, the &lt;code&gt;Publisher&lt;/code&gt; holds references to the associated &lt;code&gt;Books&lt;/code&gt;. The idea is to store those references as an array within the &lt;code&gt;Publisher&lt;/code&gt; document:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="prettyprint highlight"&gt;&lt;code data-lang="java"&gt;class Publisher {
+    // ...
+    @DBRef
+    List&amp;lt;Book&amp;gt; books;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;In the above snippet, the books property is annotated with &lt;code&gt;@DBRef&lt;/code&gt;. This advises the Spring Data mapping layer to store elements of the property as MongoDB native &lt;code&gt;$dbref&lt;/code&gt; elements, which looks like the following:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="prettyprint highlight"&gt;&lt;code data-lang="javascript"&gt;{
+    "_id" : "833f7d",
+    "name" : "Del Rey Books",
+    "arconym" : "DRB",
+    "foundationYear" : 1977,
+    "books" : [
+        {
+            "$ref" : "book",
+            "$id" : "617cfb"
+        },
+        {
+            "$ref" : "book",
+            "$id" : "23e78f"
+        }
+    ]
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Using the &lt;code&gt;@DBRef&lt;/code&gt; annotation lets us reduce storage size by not repeating all &lt;code&gt;Publisher&lt;/code&gt; information within the Book, which is good. Still, this approach has its downsides.
+The &lt;code&gt;Book&lt;/code&gt; no longer holds information about the publisher, which may impact queries that look up &lt;code&gt;Books&lt;/code&gt; by attributes of the &lt;code&gt;Publisher&lt;/code&gt;. The lack of back reference from the &lt;code&gt;Book&lt;/code&gt; to the publisher will also affect performance when looking up the &lt;code&gt;Publisher&lt;/code&gt; for a given &lt;code&gt;Book&lt;/code&gt;, since we now have to issue a query against the &lt;code&gt;Publisher&lt;/code&gt; collection that matches a &lt;code&gt;Book.id&lt;/code&gt; against the &lt;code&gt;books&lt;/code&gt; field of a publisher, instead of heading directly for its &lt;em&gt;id&lt;/em&gt;. Additionally the &lt;code&gt;books&lt;/code&gt; array in &lt;code&gt;Publisher&lt;/code&gt; uses a complex object that stores more information than necessary, whereas a &lt;em&gt;manual reference&lt;/em&gt; that uses the &lt;em&gt;id&lt;/em&gt; alone would have been sufficient, since all references objects are held in the same target collection.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Fortunately, there are ways to improve, starting with adding a back reference to the &lt;code&gt;Publisher&lt;/code&gt;, (for example, by its &lt;code&gt;id&lt;/code&gt;):&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="prettyprint highlight"&gt;&lt;code data-lang="java"&gt;class Book {
+    // ・
+    private String publisherId;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="sect2"&gt;
+&lt;h3 id="linking-with-manual-references"&gt;&lt;a class="anchor" href="#linking-with-manual-references"&gt;&lt;/a&gt;Linking with Manual References&lt;/h3&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Next, let¨s switch from &lt;em&gt;DBRef&lt;/em&gt; to &lt;em&gt;manual references&lt;/em&gt; for storing the collection of &lt;code&gt;Book&lt;/code&gt; references. The obvious step would be to remove the &lt;code&gt;@DBRef&lt;/code&gt; annotation and replace the &lt;code&gt;List&amp;lt;Book&amp;gt;&lt;/code&gt; with a &lt;code&gt;List&amp;lt;String&amp;gt;&lt;/code&gt;, as in the snippet below:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="prettyprint highlight"&gt;&lt;code data-lang="java"&gt;class Publisher {
+    // ・
+    List&amp;lt;String&amp;gt; bookIds;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="prettyprint highlight"&gt;&lt;code data-lang="javascript"&gt;{
+    ・
+    "bookIds" : ["617cfb", "23e78f", ・ ]
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;To add a new &lt;code&gt;Book&lt;/code&gt; to the &lt;code&gt;bookIds&lt;/code&gt; field of &lt;code&gt;Publisher&lt;/code&gt;, we could use the following statement.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="prettyprint highlight"&gt;&lt;code data-lang="java"&gt;template.update(Publisher.class)
+    .matching(where("id").is(publisher.id))
+    .apply(new Update().push("bookIds", book.id))
+    .first();&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Following this approach optimizes for storage format and makes a very explicit statement about the data type used in both the domain model as well as the database. Nevertheless, just &lt;code&gt;bookIds&lt;/code&gt; does not give you the context of the collection in which to look up the values contained in the &lt;code&gt;bookIds&lt;/code&gt; field.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="sect2"&gt;
+&lt;h3 id="linking-using-declarative-manual-references"&gt;&lt;a class="anchor" href="#linking-using-declarative-manual-references"&gt;&lt;/a&gt;Linking using Declarative Manual References&lt;/h3&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Starting with &lt;a href="https://spring.io/blog/2021/11/12/spring-data-2021-1-0-goes-ga"&gt;Spring Data MongoDB 3.3.0&lt;/a&gt;, &lt;em&gt;manual references&lt;/em&gt; can be expressed in a declarative way by using the &lt;code&gt;@DocumentReference&lt;/code&gt; annotation:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="prettyprint highlight"&gt;&lt;code data-lang="java"&gt;class Publisher {
+    // ・
+    @DocumentReference
+    List&amp;lt;Book&amp;gt; books;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;By default, this tells the mapping layer to extract the &lt;code&gt;id&lt;/code&gt; value of the referenced entity for storage, loading the referenced document itself on read.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="prettyprint highlight"&gt;&lt;code data-lang="javascript"&gt;{
+    ・
+    "books" : ["617cfb", ・ ]
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Because the mapping layer is aware of the link between the documents, update statements, such as the one shown earlier, detect the association and extract the &lt;em&gt;id&lt;/em&gt; for storage:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="prettyprint highlight"&gt;&lt;code data-lang="java"&gt;template.update(Publisher.class)
+    .matching(where("id").is(publisher.id))
+    .apply(new Update().push("books", book))
+    .first();&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Also, the back reference from &lt;code&gt;Book&lt;/code&gt; to &lt;code&gt;Publisher&lt;/code&gt; could be modeled this way. In this case, it might make sense to delay the retrieval of the publisher until first access of the property to avoid eager loading delays:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="prettyprint highlight"&gt;&lt;code data-lang="java"&gt;class Book {
+    // ・
+    @DocumentReference(lazy=true)
+    private Publisher publisher;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;By using declarative links, we can now preserve mapping functionality while optimizing for storage. Still, we need to be careful when adding new &lt;code&gt;Book&lt;/code&gt; instances, as those also need to be added to the &lt;code&gt;books&lt;/code&gt; field of the &lt;code&gt;Publisher&lt;/code&gt;, to establish the link:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="prettyprint highlight"&gt;&lt;code data-lang="java"&gt;template.save(newBook);
+
+template.update(Publisher.class)
+    .matching(where("id").is(newBook.publisher.id))
+    .apply(new Update().push("books", newBook))
+    .first();&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;The above snippet outlines very well the non-atomic nature of working with links between documents, which may require to run operations within a &lt;a href="https://docs.mongodb.com/manual/core/transactions/"&gt;Transaction&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="sect2"&gt;
+&lt;h3 id="one-to-many-style-references"&gt;&lt;a class="anchor" href="#one-to-many-style-references"&gt;&lt;/a&gt;One-To-Many Style References&lt;/h3&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Depending on your application&amp;#8217;s needs, it can be feasible to invert the relation between &lt;code&gt;Book&lt;/code&gt; and &lt;code&gt;Publisher&lt;/code&gt; so that the linking element is solely stored within the &lt;code&gt;Book&lt;/code&gt; documents. This lets you store &lt;code&gt;Books&lt;/code&gt; without having to think about updating the &lt;code&gt;Publisher&lt;/code&gt; document, as we saw in the last snippet.
+To do so, we need to do two things. First, we need to tell the mapping layer to omit storing links from &lt;code&gt;Publisher&lt;/code&gt; to &lt;code&gt;Book&lt;/code&gt; and second, update the &lt;em&gt;lookup query&lt;/em&gt; when retrieving linked &lt;code&gt;Books&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;The initial part is rather easy, applying an additional &lt;code&gt;@ReadOnlyPorperty&lt;/code&gt; annotation to the &lt;code&gt;books&lt;/code&gt; property. The other part requires us to update the &lt;code&gt;lookup&lt;/code&gt; attribute of the &lt;code&gt;@DocumentReference&lt;/code&gt; annotation with a custom query:&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="listingblock"&gt;
+&lt;div class="content"&gt;
+&lt;pre class="prettyprint highlight"&gt;&lt;code data-lang="java"&gt;class Publisher {
+    // ・
+    @ReadOnlyProperty
+    @DocumentReference(lookup="{'publisher':?#{#self._id} }")
+    List&amp;lt;Book&amp;gt; books;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;In the snippet above, we make use of the expression  support within the query parser of Spring Data. In doing so, we can access the raw &lt;code&gt;Publisher&lt;/code&gt; document by using the &lt;code&gt;#self&lt;/code&gt; attribute and can extract its identifier to then use it when querying the &lt;code&gt;Book&lt;/code&gt; collection for matching elements.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="sect2"&gt;
+&lt;h3 id="final-remarks"&gt;&lt;a class="anchor" href="#final-remarks"&gt;&lt;/a&gt;Final Remarks&lt;/h3&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Having a single aggregate root with embedded data has many advantages. Still, it is important to understand how to model relations once those advantages are superseded by other concerns, such as storage size or operability.
+We have seen that, by moving from an &lt;em&gt;embedded&lt;/em&gt; approach to &lt;em&gt;DBRefs&lt;/em&gt; and on to &lt;em&gt;manual references&lt;/em&gt;, we can reduce storage size. However, we have to deal with other problems, such as changes that affect multiple documents and limited query options.
+&lt;code&gt;@DocumentReference&lt;/code&gt; can be a powerful tool that lets you express and customize links between documents. You can learn more about it in our &lt;a href="https://docs.spring.io/spring-data/mongodb/docs/3.3.0/reference/html/#mapping-usage.document-references"&gt;Reference Documentation&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Nevertheless, before you leave, please always keep in mind that links between documents require additional server roundtrips. Therefore, make sure to have indexes available that support your lookup. A collection of linked documents is bulk loaded, restoring ordering on a best effort basis within the memory of your application.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="paragraph"&gt;
+&lt;p&gt;Also, always ask yourself which is best for your application? Is the default embedding approach the better solution? Do you really need the cyclic back reference? Should a link be lazy? How will non-atomic updates affect your application? And finally, which queries do you need to run?&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- rendered by Sagan Renderer Service --&gt;</content>
+  </entry>
   <entry>
     <title>A Bootiful Podcast: Reactive-System and Functional Programming legend Debasish Ghosh</title>
     <link rel="alternate" href="https://spring.io/blog/2021/11/25/a-bootiful-podcast-reactive-system-and-functional-programming-legend-debasish-ghosh" />
@@ -535,47 +835,6 @@ We&amp;#8217;re currently working with Sonatype to investigate options to potent
   &lt;li&gt;Spring Data Couchbase 4.1.15 - &lt;a href="https://repo.spring.io/libs-release/org/springframework/data/spring-data-couchbase/4.1.15"&gt;Artifacts&lt;/a&gt; - &lt;a href="https://docs.spring.io/spring-data/couchbase/docs/4.1.15/api"&gt;Javadoc&lt;/a&gt; - &lt;a href="https://docs.spring.io/spring-data/couchbase/docs/4.1.15/reference/html"&gt;Documentation&lt;/a&gt; - &lt;a href="https://github.com/spring-projects/spring-data-couchbase/releases/tag/4.1.15"&gt;Changelog&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;Spring Data for Apache Solr 4.3.15 - &lt;a href="https://repo.spring.io/libs-release/org/springframework/data/spring-data-solr/4.3.15"&gt;Artifacts&lt;/a&gt; - &lt;a href="https://docs.spring.io/spring-data/solr/docs/4.3.15/api"&gt;Javadoc&lt;/a&gt; - &lt;a href="https://docs.spring.io/spring-data/solr/docs/4.3.15/reference/html"&gt;Documentation&lt;/a&gt; - &lt;a href="https://github.com/spring-projects/spring-data-solr/releases/tag/4.3.15"&gt;Changelog&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;!-- rendered by Sagan Renderer Service --&gt;</content>
-  </entry>
-  <entry>
-    <title>A Bootiful Podcast: JMS and Messaging legend, HornetQ and Artemis cofounder, Clebert Suconic</title>
-    <link rel="alternate" href="https://spring.io/blog/2021/11/11/a-bootiful-podcast-jms-and-messaging-legend-hornetq-and-artemis-cofounder-clebert-suconic" />
-    <category term="engineering" label="Engineering" />
-    <author>
-      <name>Josh Long</name>
-    </author>
-    <id>tag:spring.io,2021-11-11:4601</id>
-    <updated>2021-11-11T20:00:00Z</updated>
-    <content type="html">&lt;p&gt;Hi, Spring fans! In this installment, &lt;a href="https://twitter.com/starbuxman"&gt;Josh Long (@starbuxman)&lt;/a&gt; talks to Apache Artemis and messaging legend &lt;a href="https://twitter.com/clebertsuconic"&gt;Clebert Suconic (@clebertsuconic)&lt;/a&gt;. Check out ArtemisCloud.io for easy Kubernetes deployments of Apache Artemis.&lt;/p&gt;
-&lt;iframe title="JMS and Messaging legend, HornetQ and Artemis cofounder, Clebert Suconic" allowtransparency="true" height="150" width="100%" style="border: none; min-width: min(100%, 430px);" scrolling="no" data-name="pb-iframe-player" src="https://www.podbean.com/player-v2/?i=3xay8-112bfd0-pb&amp;from=pb6admin&amp;share=1&amp;download=1&amp;rtl=0&amp;fonts=Arial&amp;skin=1&amp;font-color=&amp;btn-skin=7"&gt;&lt;/iframe&gt;
-&lt;!-- rendered by Sagan Renderer Service --&gt;</content>
-  </entry>
-  <entry>
-    <title>Spring Framework 5.3.13 available now</title>
-    <link rel="alternate" href="https://spring.io/blog/2021/11/11/spring-framework-5-3-13-available-now" />
-    <category term="releases" label="Releases" />
-    <author>
-      <name>St?phane Nicoll</name>
-    </author>
-    <id>tag:spring.io,2021-11-11:4600</id>
-    <updated>2021-11-11T08:23:07Z</updated>
-    <content type="html">&lt;p&gt;On behalf of the team and everyone who has contributed, I am pleased to announce that Spring Framework &lt;code&gt;5.3.13&lt;/code&gt; is available now.&lt;/p&gt;
-&lt;p&gt;Spring Framework &lt;code&gt;5.3.13&lt;/code&gt; includes &lt;a href="https://github.com/spring-projects/spring-framework/releases/tag/v5.3.13"&gt;16 fixes and improvements&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Stay tuned for follow-up Spring Boot releases next week.&lt;/p&gt;
-&lt;p&gt;&lt;a href="https://projects.spring.io/spring-framework/"&gt;Project Page&lt;/a&gt; | &lt;a href="https://github.com/spring-projects/spring-framework"&gt;GitHub&lt;/a&gt; | &lt;a href="https://github.com/spring-projects/spring-framework/issues"&gt;Issues&lt;/a&gt; | &lt;a href="https://docs.spring.io/spring-framework/docs/5.3.13/reference/html/"&gt;Documentation&lt;/a&gt;&lt;/p&gt;
-&lt;!-- rendered by Sagan Renderer Service --&gt;</content>
-  </entry>
-  <entry>
-    <title>Spring Tips: My Reactive Summit 2021 Day 2 Keynote with James Ward</title>
-    <link rel="alternate" href="https://spring.io/blog/2021/11/10/spring-tips-my-reactive-summit-2021-day-2-keynote-with-james-ward" />
-    <category term="engineering" label="Engineering" />
-    <author>
-      <name>Josh Long</name>
-    </author>
-    <id>tag:spring.io,2021-11-10:4599</id>
-    <updated>2021-11-10T20:00:00Z</updated>
-    <content type="html">&lt;p&gt;Hi, Spring fans! Welcome to another installment of &lt;em&gt;Spring Tips&lt;/em&gt;! In this installment, I wanted to share with you the keynote that &lt;a href="https://twitter.com/_JamesWard"&gt;Google&amp;rsquo;s James Ward (@_JamesWard)&lt;/a&gt; and I put together for the recent Reactive Summit 2021 event, titled: &amp;ldquo;&lt;em&gt;Reactive, Here and There&lt;/em&gt;.&amp;rdquo; &lt;/p&gt;
-&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/uAb2NtRrxSk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
 &lt;!-- rendered by Sagan Renderer Service --&gt;</content>
   </entry>
 </feed>
