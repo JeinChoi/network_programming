@@ -15,6 +15,7 @@ class ChatMsg implements Serializable {
 	public MouseEvent mouse_e;
 	public int pen_size; // pen size
 	public ArrayList<String> al;
+	public ArrayList<ImageIcon> imgList;
 	public int i;
 	public int multiChatNum;
 	public ChatMsg(String UserName, String code, String msg) {

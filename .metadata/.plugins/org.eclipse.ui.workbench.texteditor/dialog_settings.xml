@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="refresh"/>
+		<item key="selection" value="550"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
-			<item value="refresh"/>
+			<item value="550"/>
+			<item value="500"/>
+			<item value="testbutton"/>
+			<item value="basic"/>
 			<item value="101"/>
-			<item value="userNameList"/>
-			<item value="refres"/>
-			<item value="picturepanel"/>
-			<item value="PicturePanel`"/>
-			<item value="PicturePanel"/>
-			<item value="ListPanel"/>
-			<item value="List"/>
-			<item value="Lispanel"/>
-			<item value="picture"/>
-			<item value="chatpanel"/>
-			<item value="case &quot;700&quot;"/>
-			<item value="case 700"/>
+			<item value="100"/>
+			<item value="chatPanel"/>
+			<item value="chat"/>
+			<item value="bas"/>
+			<item value="ba"/>
+			<item value="pack"/>
+			<item value="profileI"/>
+			<item value="profile"/>
+			<item value="700`"/>
 			<item value="700"/>
 		</list>
 		<list key="replacehistory">

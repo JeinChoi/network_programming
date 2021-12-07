@@ -126,17 +126,11 @@ public class MultiChat extends JFrame{
        textArea = new JTextPane();
        textArea.setEditable(true);
        textArea.setFont(new Font("굴림체", Font.PLAIN, 14));
-       scrollPane.setViewportView(textArea);
-       
+       scrollPane.setViewportView(textArea);       
        
        Color textAreaColor=new Color(155,187,212);  
-       textArea.setBackground(textAreaColor);
-     
-       
-     
-       
-       
-
+       textArea.setBackground(textAreaColor);     
+                       
        txtInput = new JTextField();
        txtInput.setBounds(97, 500, 209, 30);
        contentPane.add(txtInput);
@@ -155,7 +149,7 @@ public class MultiChat extends JFrame{
        Myaction action = new Myaction();
       btnSend.addActionListener(action); // 내부클래스로 액션 리스너를 상속받은 클래스로
       txtInput.addActionListener(action);
-       
+    //서버에서 클라이언트로 이미지 하나하나 그림.   
        lblUserName = new JLabel("Name");
        lblUserName.setBorder(new LineBorder(new Color(0, 0, 0)));
        lblUserName.setBackground(Color.WHITE);

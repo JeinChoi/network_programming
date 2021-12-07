@@ -31,6 +31,9 @@ import javax.swing.JButton;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -51,6 +54,7 @@ public class ChatFriendList extends JFrame {
    ArrayList<MultiChat> myMultiChat = new ArrayList<MultiChat>();
    ArrayList<OneChatRoomPanel> oneChatRoomPanelList = new ArrayList<OneChatRoomPanel>();
    Map<String,PicturePanel> userPicturePanel = new  HashMap<String,PicturePanel>();
+   ArrayList<PicturePanel> picuturePanelList = new ArrayList<PicturePanel>();
    private JPanel contentPane;
    private JTextField txtIpAddress;
    private JTextField txtPortNumber;
@@ -96,7 +100,8 @@ public class ChatFriendList extends JFrame {
    private JLabel userListLabel;
    
    private JPanel userListPanel;
-   
+   public JLabel userImgLabel;
+   public JPanel userImgPanel;
    private JButton testButton;
    private int i=0;
    private int myRoomNum=0; 
@@ -138,26 +143,27 @@ public class ChatFriendList extends JFrame {
       userNameLabel.setBounds(77, 75, 68, 15);
       contentPane_1.add(userNameLabel);
       
-      JPanel userImgPanel = new JPanel();
+      userImgPanel = new JPanel();
       userImgPanel.setBackground(Color.WHITE);
       userImgPanel.setBounds(23, 66, 42, 42);
       contentPane_1.add(userImgPanel);
 //      MyPanel panel = new MyPanel("src/icon1.jpg");
 //      contentPane_1.add(panel);
+      
       ImageIcon icon = new ImageIcon("src/basicProfileImg.jpg");
       Image img = icon.getImage();
       Image changeImg = img.getScaledInstance(41,41, Image.SCALE_SMOOTH);
       ImageIcon changeIcon = new ImageIcon(changeImg);
-      JLabel label1 = new JLabel(changeIcon);
-      JLabel label2 = new JLabel(changeIcon);
-      userImgPanel.add(label1);
+      userImgLabel = new JLabel(changeIcon);
+      userImgPanel.add(userImgLabel);
       
       //JPanel friendImgPanel = new JPanel();
      // friendImgPanel.setBackground(Color.WHITE);
      // friendImgPanel.setBounds(23, 119, 42, 42);
      
-      ImageIcon friendIcon = new ImageIcon("src/basicProfileImg.jpg");
-      JLabel friendIconlabel = new JLabel(friendIcon);
+   
+      
+      
      // friendImgPanel.add(friendIconlabel);
       
      // contentPane_1.add(friendImgPanel);
@@ -361,7 +367,8 @@ public class ChatFriendList extends JFrame {
                   System.out.println(fd.getDirectory() + fd.getFile());
                   obcm.img = img;
                   //obcm.multiChatNum=multiNum;
-                    refreshPanel(img);
+                   // refreshPanel(img);
+                  refreshMyProfile(fd.getDirectory() + fd.getFile());
                   chatFriendList.SendObject(obcm);
                }
             }
@@ -382,11 +389,53 @@ public class ChatFriendList extends JFrame {
       
      
    }
-   public void refreshPanel(ImageIcon img){
-	   for(int i=0;i<userPicturePanel.size();i++) {
-		   String temp = userNameList.get(i);//arraylist get(0),get(1) => 0번째에 저장된 username 
-		   userPicturePanel.get(userNameList.get(i)).setImg();//map key:string(username) value:picturepanel
+   
+   public void setMyImg(String img) {
+	   
+	      userImgPanel.revalidate();
+	      userImgPanel.repaint();
+	      userImgLabel.revalidate();
+	      userImgLabel.repaint();
+	      
+	      userImgPanel.remove(userImgLabel);
+	      revalidate();
+	      repaint();
+	      
+	      // ImageIcon icon1 = new ImageIcon("src/profilesPakage/"+UserName+".jpg");
+	       ImageIcon icon1 = new ImageIcon(img);
+	       Image img2 = icon1.getImage();
+	      Image changeImg1 = img2.getScaledInstance(41, 41, Image.SCALE_SMOOTH);
+	      ImageIcon changeIcon1 = new ImageIcon(changeImg1);
+	         // JLabel picturelabel2 = new JLabel(changeIcon1);
+	         userImgLabel.setIcon(changeIcon1);
+	         userImgPanel.add(userImgLabel);
+	      // userImgPanel.setVisible(false);
+	      System.out.println(UserName + " 내이미지 바꾸기!!");
+
+	   }
+
+	   public void refreshMyProfile(String img) { // 내 프로필 사진 업데이트
+
+	      ////this.revalidate();
+	      //this.repaint();
+	      setMyImg(img);
+
+	   }
+   public void refreshPanel(){
+	   for(int i=0;i<userNameList.size();i++) {
+		   //a,b   
+		   String eachUserName = userNameList.get(i);//arraylist get(0),get(1) => 0번째에 저장된 username
+		   if(eachUserName.equals(UserName)) continue;
+		   System.out.println("refreshPanel userName "+userNameList.get(i));
+		   userPicturePanel.get(userNameList.get(i)).setImg(eachUserName);//map key:string(username) value:picturepanel
+		   userPicturePanel.get(userNameList.get(i)).revalidate();
+		   
+		   
+		   //picuturePanelList.get(i).userName;//만약에 userName이 같다면.
+		   //b
 	   }//나자신의 프로필 사진을 갱신
+	 
+	   userListPanel.repaint();
  	  this.revalidate();
    }
   public class CheckAction implements ItemListener{
@@ -415,28 +464,28 @@ public class ChatFriendList extends JFrame {
 	  String userName;
 	  public PicturePanel(String userName) {
 		  this.userName = userName;
-	        ImageIcon icon = new ImageIcon("src/basicProfileImg.jpg");
+	        ImageIcon icon = new ImageIcon("src/profilesPackage/"+userName+".jpg");
 	         Image img = icon.getImage();
 	         Image changeImg = img.getScaledInstance(41,41, Image.SCALE_SMOOTH);
 	         ImageIcon changeIcon = new ImageIcon(changeImg);
 	        picturelabel = new JLabel(changeIcon);
 	          this.add(picturelabel);
 	          userPicturePanel.put(userName,this);
-	   
+	          picuturePanelList.add(this);
 	         //picturepanel 밖에서 list모으고 700언급될 때마다 picturePanel.setImg호출
 	         
 	     }
-	  public void setImg() {
-	       this.remove(picturelabel);
-	          revalidate();
-	          System.out.println(userName);
-	         ImageIcon icon1 = new ImageIcon("src/icon1.jpg");
+	  public void setImg(String eachUserName) {
+		  	 this.remove(picturelabel);
+	         revalidate();
+	         System.out.println("setImg "+userName);
+	         ImageIcon icon1 = new ImageIcon("src/profilesPackage/"+eachUserName+".jpg");
 	         Image img2 = icon1.getImage();
 	         Image changeImg1 = img2.getScaledInstance(41,41, Image.SCALE_SMOOTH);
 	         ImageIcon changeIcon1 = new ImageIcon(changeImg1);
 	         //JLabel picturelabel2 = new JLabel(changeIcon1);
 	         picturelabel.setIcon(changeIcon1);
-	        this.add(picturelabel);
+	        this.add(picturelabel);//만약 패널 자체를 구분할 수 잇는게 아니라면?
 	  }
 //	  class mouseAdapter extends MouseAdapter {
 //		  public void mouseClicked(MouseEvent e) {
@@ -473,7 +522,7 @@ public class ChatFriendList extends JFrame {
              }
         }
    }
- }
+ }//
   public class OneChatRoomPanel extends JPanel{
      int multiChatNum;
      MultiChat multiChat;
@@ -564,13 +613,18 @@ public class ChatFriendList extends JFrame {
                     
                         String[] userListString= cm.data.split(",");
                         userNameList = cm.al;
-                        System.out.println(userNameList);
+                        System.out.print("101 list : "+userNameList + "string : ");
+                        for(int i=0;i<userListString.length;i++) {
+                        	System.out.print(userListString[i]);
+                        	
+                        }
+                        System.out.println("\n");
                         //ShowInvitedFriendsList showInvitedFriendsList = new ShowInvitedFriendsList(cm.data, UserName);
                         
                                ListPanel userOnePanel;
                                  JLabel userOneLabel;
-                                 //userListPanel.removeAll();
-
+                                 userListPanel.removeAll();
+                                 userOneListPanel.clear();
                                  int j=0;
                                  for (int i=0; i<userListString.length; i++) {
                                    // System.out.println(userListString[i]);
@@ -694,7 +748,9 @@ public class ChatFriendList extends JFrame {
                           
                           break;
                      case "700":
-                    	 //refreshPanel();
+                    	 System.out.println("700 왔다");
+                    	 System.out.println(cm.imgList);
+                    	 refreshPanel();
                     	 break;
                         
                   
@@ -767,6 +823,38 @@ public class ChatFriendList extends JFrame {
          AppendText("SendObject Error");
       }
    }
+    public void saveProfile(String img, String userName)
+    {
+       
+        File oldFile = new File(img);
+        File newFile = new File("/src/profilesPackage/"+userName+".jpg");
+
+
+        try {
+            FileInputStream input = new FileInputStream(oldFile);
+            FileOutputStream output = new FileOutputStream(newFile);
+
+
+            byte[] buf = new byte[2048];
+
+            int read;
+
+            while((read = input.read(buf)) > 0)
+            {
+                output.write(buf, 0, read);
+            }
+
+            input.close();
+            output.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        
+        
+        
+    }
 }
 
 //class MyMouse implements MouseListener{

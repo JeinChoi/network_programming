@@ -1,6 +1,7 @@
 //JavaObjServer.java ObjectStream 기반 채팅 Server
 
 import java.awt.EventQueue;
+import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -35,7 +36,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 
 public class JavaGameServer extends JFrame {
-   ArrayList userNameList = new ArrayList();
+   ArrayList<String> userNameList = new ArrayList<String>();
 
    /**
     * 
@@ -53,7 +54,8 @@ public class JavaGameServer extends JFrame {
    Map<String,ObjectOutputStream> clientsOutputStream = new HashMap<String,ObjectOutputStream>();
    Map<String,ImageIcon> profileMems = new HashMap<String,ImageIcon>();
    String invitedUsersStr; // 하나의 단톡방에 초대된 사람들 리스트
-
+//chatlist자체를 구별을 못하나? 구별할 이유가 없는데 
+   ArrayList<ImageIcon> profileImageIcons = new ArrayList<ImageIcon>();
    /**
     * Launch the application.
     */
@@ -219,7 +221,7 @@ public class JavaGameServer extends JFrame {
             //if (user.UserStatus == "O")
                user.WriteOne(str);
          }
-         if(str=="550") { // 단톡방 생성 코드라면 방 번호 1씩 증가
+         if(str.equals("550")) { // 단톡방 생성 코드라면 방 번호 1씩 증가
            multiChatNum++;
            
          }
@@ -281,6 +283,7 @@ public class JavaGameServer extends JFrame {
                ChatMsg obcm = new ChatMsg("SERVER", "101", userNameListStr);
                obcm.al = userNameList;
                oos.writeObject(obcm);
+               oos.reset();
             }
             
             if(msg.matches("550")) { // 일단 모두에게 단톡방에 초대된 사람들 리스트 보내기
@@ -288,6 +291,12 @@ public class JavaGameServer extends JFrame {
                 obcm.multiChatNum=multiChatNum; //ChatMsg에 multiChatNum 설정
                 
                  oos.writeObject(obcm); // 클라이언트에게 보냄
+            }
+            if(msg.matches("700")) {
+            	 ChatMsg obcm = new ChatMsg("SERVER", "700", "profile update");
+                 
+                 
+                  oos.writeObject(obcm); // 클라이언트에게 보냄
             }
             else {
                ChatMsg obcm = new ChatMsg("SERVER", "200", msg);
@@ -317,6 +326,7 @@ public class JavaGameServer extends JFrame {
          try {
             ChatMsg obcm = new ChatMsg("귓속말", "200", msg);
             oos.writeObject(obcm);
+            
          } catch (IOException e) {
             AppendText("dos.writeObject() error");
             try {
@@ -380,7 +390,7 @@ public class JavaGameServer extends JFrame {
       {
          
           File oldFile = new File(img);
-          File newFile = new File("\\src\\profilesPackage\\"+userName+".jpg");
+          File newFile = new File("../JavaGameClient/src/profilesPackage/"+userName+".jpg");
 
 
           try {
@@ -405,7 +415,6 @@ public class JavaGameServer extends JFrame {
               e.printStackTrace();
           }
           
-          WriteAll("101");
           
           
       }
@@ -438,7 +447,7 @@ public class JavaGameServer extends JFrame {
                   
                   userNameList.add(cm.UserName);
                   //String userNameListStr = String.join(",", userNameList);
-                  saveProfile("src/basicProfileImg.jpg", cm.UserName);
+                  saveProfile("../JavaGameClient/src/basicProfileImg.jpg", cm.UserName);
                   
                  // WriteOthersObject(cm);
                   WriteAll("101");
@@ -484,8 +493,18 @@ public class JavaGameServer extends JFrame {
                }
                else if(cm.code.matches("700")) {
                    saveProfile(cm.img.toString(), cm.UserName);
-                   //WriteAll("700");
-                   //WriteAll("101");
+                   //이미지 하나 받으면 저장.
+                   //profilesPackage하나씩 보냄.
+                   System.out.println("700서버에서 옴.");
+                   for(int i=0;i<userNameList.size();i++) {
+                	   ImageIcon icon1 = new ImageIcon("/src/profilesPackage/"+userNameList.get(i)+".jpg");
+                	   profileImageIcons.add(icon1);
+                   }
+//                   ChatMsg profileListMsg = new ChatMsg("SERVER","700","send imageList");
+//                   profileListMsg.imgList = profileImageIcons;
+//                   
+//                   WriteAllObject(profileListMsg);
+                   WriteAll("700");
                    
                    
                }

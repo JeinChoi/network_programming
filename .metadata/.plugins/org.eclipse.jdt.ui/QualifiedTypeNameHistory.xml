@@ -40,4 +40,7 @@
     <fullyQualifiedTypeName name="javax.swing.ImageIcon"/>
     <fullyQualifiedTypeName name="javax.swing.JFrame"/>
     <fullyQualifiedTypeName name="javax.swing.JPanel"/>
+    <fullyQualifiedTypeName name="java.io.FileInputStream"/>
+    <fullyQualifiedTypeName name="java.io.FileOutputStream"/>
+    <fullyQualifiedTypeName name="java.io.File"/>
 </qualifiedTypeNameHistroy>
