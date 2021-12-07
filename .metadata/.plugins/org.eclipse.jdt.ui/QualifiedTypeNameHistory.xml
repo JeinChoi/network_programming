@@ -23,7 +23,6 @@
     <fullyQualifiedTypeName name="java.util.Vector"/>
     <fullyQualifiedTypeName name="javax.swing.BorderFactory"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
-    <fullyQualifiedTypeName name="javax.swing.JFrame"/>
     <fullyQualifiedTypeName name="java.util.Map"/>
     <fullyQualifiedTypeName name="java.util.Set"/>
     <fullyQualifiedTypeName name="java.util.HashMap"/>
@@ -31,11 +30,14 @@
     <fullyQualifiedTypeName name="java.lang.System"/>
     <fullyQualifiedTypeName name="java.awt.Frame"/>
     <fullyQualifiedTypeName name="java.awt.FileDialog"/>
-    <fullyQualifiedTypeName name="javax.swing.ImageIcon"/>
     <fullyQualifiedTypeName name="java.awt.Graphics"/>
     <fullyQualifiedTypeName name="javax.swing.text.SimpleAttributeSet"/>
     <fullyQualifiedTypeName name="javax.swing.text.StyledDocument"/>
     <fullyQualifiedTypeName name="javax.swing.text.StyleConstants"/>
     <fullyQualifiedTypeName name="javax.swing.text.BadLocationException"/>
     <fullyQualifiedTypeName name="java.awt.Image"/>
+    <fullyQualifiedTypeName name="javax.swing.JScrollPane"/>
+    <fullyQualifiedTypeName name="javax.swing.ImageIcon"/>
+    <fullyQualifiedTypeName name="javax.swing.JFrame"/>
+    <fullyQualifiedTypeName name="javax.swing.JPanel"/>
 </qualifiedTypeNameHistroy>

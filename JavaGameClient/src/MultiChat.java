@@ -37,7 +37,7 @@ public class MultiChat extends JFrame{
     private Frame frame;
     private FileDialog fd;
     private MultiChat multiChat;
-    
+   
     JPanel panel;
     
     //private Graphics gc;
@@ -78,7 +78,7 @@ public class MultiChat extends JFrame{
             frame = new Frame("이미지첨부");
             fd = new FileDialog(frame, "이미지 선택", FileDialog.LOAD);
             // frame.setVisible(true);
-            // fd.setDirectory(".\\");
+            fd.setDirectory(".\\");
             fd.setVisible(true);
             // System.out.println(fd.getDirectory() + fd.getFile());
             if (fd.getDirectory().length() > 0 && fd.getFile().length() > 0) {
@@ -128,12 +128,17 @@ public class MultiChat extends JFrame{
        textArea.setFont(new Font("굴림체", Font.PLAIN, 14));
        scrollPane.setViewportView(textArea);
        
+       
        Color textAreaColor=new Color(155,187,212);  
        textArea.setBackground(textAreaColor);
-      
+     
+       
+     
+       
+       
 
        txtInput = new JTextField();
-       txtInput.setBounds(89, 501, 209, 30);
+       txtInput.setBounds(97, 500, 209, 30);
        contentPane.add(txtInput);
        txtInput.setColumns(10);
      
@@ -141,7 +146,7 @@ public class MultiChat extends JFrame{
        
      
        btnSend = new JButton("\uC804\uC1A1");
-       btnSend.setFont(new Font("굴림", Font.PLAIN, 12));
+       btnSend.setFont(new Font("굴림", Font.PLAIN, 9));
        btnSend.setBounds(310, 501, 54, 30);
        contentPane.add(btnSend);
        
@@ -159,7 +164,7 @@ public class MultiChat extends JFrame{
        lblUserName.setBounds(161, 539, 62, 40);
        contentPane.add(lblUserName);
        this.setVisible(true);
-       
+       this.setVisible(false);
        //AppendText("User " + username + " connecting " + ip_addr + " " + port_no);
        //UserName = username;
        lblUserName.setText(username);
@@ -169,7 +174,7 @@ public class MultiChat extends JFrame{
        String invitedFriendsString = String.join(",", invitedFriendsArr);
        AppendText(invitedFriendsString+"님이 초대되었습니다.");
        
-       ImageIcon addImageIcon = new ImageIcon("src/imageBtn.png");
+       ImageIcon addImageIcon = new ImageIcon("src/ImgBtn.png");
        Image tempImgIcon = addImageIcon.getImage();
        Image changeAddImageIcon = tempImgIcon.getScaledInstance(40,30,Image.SCALE_SMOOTH);
        ImageIcon newAddImageIcon = new ImageIcon(changeAddImageIcon);
@@ -178,7 +183,7 @@ public class MultiChat extends JFrame{
        imgBtn.setContentAreaFilled(false);
        imgBtn.setFocusPainted(false);
        imgBtn.setFont(new Font("굴림", Font.PLAIN, 16));
-       imgBtn.setBounds(12, 501, 40, 30);
+       imgBtn.setBounds(12, 501, 26, 30);
        contentPane.add(imgBtn);
        //imgBtn.setBackground(yellowColor);
        ImageSendAction action2 = new ImageSendAction();
@@ -195,7 +200,7 @@ public class MultiChat extends JFrame{
       emoticonBtn.setBorderPainted(false);
       emoticonBtn.setContentAreaFilled(false);
       emoticonBtn.setFocusPainted(false);
-      emoticonBtn.setBounds(49, 501, 40, 30);
+      emoticonBtn.setBounds(47, 501, 26, 30);
       contentPane.add(emoticonBtn);
       
       EmoticonSendAction action3 = new EmoticonSendAction();
@@ -227,6 +232,16 @@ public class MultiChat extends JFrame{
       // 끝으로 이동
       //textArea.setCaretPosition(len);
       //textArea.replaceSelection(msg + "\n");
+//      JPanel ex = new JPanel();
+//      JLabel exxx = new JLabel(msg);
+//      System.out.println("label안에 있는 텍스트"+exxx.getText());
+//      ex.setSize(144,30);
+//      ex.setLocation(113,50);
+//      ex.add(exxx);
+//      textAreaPanel.add(ex);
+//      ex=null;
+//      exxx=null;
+//      
       
       StyledDocument doc = textArea.getStyledDocument();
       SimpleAttributeSet left = new SimpleAttributeSet();
@@ -250,7 +265,7 @@ public class MultiChat extends JFrame{
    
    public void AppendTextR(String msg) {
       msg = msg.trim(); // 앞뒤 blank와 \n을 제거한다. 
-      
+      System.out.println("multichat의 appendText도착?");
       StyledDocument doc = textArea.getStyledDocument();
       SimpleAttributeSet right = new SimpleAttributeSet();
       StyleConstants.setAlignment(right, StyleConstants.ALIGN_RIGHT);
@@ -262,6 +277,15 @@ public class MultiChat extends JFrame{
          // TODO Auto-generated catch block
          e.printStackTrace();
       }
+      
+//      JPanel ex = new JPanel();
+//      JLabel exxx = new JLabel(msg);
+//      ex.setSize(40,40);
+//      ex.setLocation(80,80);
+//      ex.add(exxx);System.out.println("label안에 있는 텍스트"+exxx.getText());
+//      textAreaPanel.add(ex);
+//      ex=null;
+//      exxx=null;
    }
    
 public void AppendImage(ImageIcon ori_icon) {

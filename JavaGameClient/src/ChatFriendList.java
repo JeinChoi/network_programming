@@ -43,13 +43,14 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JTextArea;
 public class ChatFriendList extends JFrame {
-   ArrayList userNameList = new ArrayList();
+   ArrayList<String> userNameList= new ArrayList<String>();
    ArrayList<String> selectedNameList = new ArrayList<String>();
    ArrayList<String> sendSelectedNameList = new ArrayList<String>();
    ArrayList<ListPanel> userOneListPanel = new ArrayList<ListPanel>();
    //Map<Integer,ArrayList<String>> myMultiChat= new HashMap<>();
    ArrayList<MultiChat> myMultiChat = new ArrayList<MultiChat>();
    ArrayList<OneChatRoomPanel> oneChatRoomPanelList = new ArrayList<OneChatRoomPanel>();
+   Map<String,PicturePanel> userPicturePanel = new  HashMap<String,PicturePanel>();
    private JPanel contentPane;
    private JTextField txtIpAddress;
    private JTextField txtPortNumber;
@@ -163,7 +164,7 @@ public class ChatFriendList extends JFrame {
       
    
      
-      
+     
       JLabel friendNameLabel = new JLabel("");
       friendNameLabel.setFont(new Font("굴림", Font.BOLD, 14));
       friendNameLabel.setBounds(77, 134, 68, 15);
@@ -293,16 +294,10 @@ public class ChatFriendList extends JFrame {
             SendObject(chatMsg);  // 단톡방에 초대된 유저들 리스트 서버로 보내기 
  
             String selectedNameListStr = String.join(",", selectedNameList);
-            
-         
-            
 
             sendSelectedNameList.clear();
 
-        
-            //JavaGameClientView view = new JavaGameClientView(username, "127.0.0.1", "30000");
-           // ChatRoom room = new ChatRoom(username, "127.0.0.1", "30000", socket);
-            
+    
             for(int j=0;j<userOneListPanel.size();j++) {
             userOneListPanel.get(j).getCheckBox().setSelected(false);
             
@@ -343,16 +338,56 @@ public class ChatFriendList extends JFrame {
       onlineFriendLabel.setFont(new Font("굴림", Font.BOLD, 14));
       onlineFriendLabel.setBounds(23, 134, 76, 34);
       contentPane_1.add(onlineFriendLabel);
+      
+      JButton changeProfileBtn = new JButton("\uD504\uB85C\uD544 \uBCC0\uACBD");
+      changeProfileBtn.setBounds(197, 85, 102, 23);
+      contentPane_1.add(changeProfileBtn);
+      
+      class SelectProfile extends MouseAdapter {
+          //private static final String ListPanel = null;
+
+       public void mouseClicked(MouseEvent e) { // 단톡방 초대하기 
+           System.out.println("프사 바꾸기 버튼 선택");
+           if (e.getSource() == changeProfileBtn) {
+               frame = new Frame("이미지첨부");
+               fd = new FileDialog(frame, "이미지 선택", FileDialog.LOAD);
+               // frame.setVisible(true);
+               fd.setDirectory(".\\");
+               fd.setVisible(true);
+               // System.out.println(fd.getDirectory() + fd.getFile());
+               if (fd.getDirectory().length() > 0 && fd.getFile().length() > 0) {
+                  ChatMsg obcm = new ChatMsg(username, "700", "IMG"); // 코드 300과 함께 이미지 보냄 
+                  ImageIcon img = new ImageIcon(fd.getDirectory() + fd.getFile());
+                  System.out.println(fd.getDirectory() + fd.getFile());
+                  obcm.img = img;
+                  //obcm.multiChatNum=multiNum;
+                    refreshPanel(img);
+                  chatFriendList.SendObject(obcm);
+               }
+            }
+          }
+          
+       }
+      
+      
+      SelectProfile selectProfile = new SelectProfile();
+      changeProfileBtn.addMouseListener(selectProfile);
+      
       ShowCheckBox showCheckBox = new ShowCheckBox();
       checkboxVisibleBtn.addMouseListener(showCheckBox);
       checkboxVisibleBtn.setVisible(false);
       
-
-      
-      
+          
     
       
      
+   }
+   public void refreshPanel(ImageIcon img){
+	   for(int i=0;i<userPicturePanel.size();i++) {
+		   String temp = userNameList.get(i);//arraylist get(0),get(1) => 0번째에 저장된 username 
+		   userPicturePanel.get(userNameList.get(i)).setImg();//map key:string(username) value:picturepanel
+	   }//나자신의 프로필 사진을 갱신
+ 	  this.revalidate();
    }
   public class CheckAction implements ItemListener{
      String userName;
@@ -376,16 +411,51 @@ public class ChatFriendList extends JFrame {
      
   }
   public class PicturePanel extends JPanel{
-     public PicturePanel() {
-        ImageIcon icon = new ImageIcon("src/basicProfileImg.jpg");
-         Image img = icon.getImage();
-         Image changeImg = img.getScaledInstance(41,41, Image.SCALE_SMOOTH);
-         ImageIcon changeIcon = new ImageIcon(changeImg);
-         JLabel picturelabel = new JLabel(changeIcon);
-         
-         this.add(picturelabel);
-         
-     }
+	  JLabel picturelabel;
+	  String userName;
+	  public PicturePanel(String userName) {
+		  this.userName = userName;
+	        ImageIcon icon = new ImageIcon("src/basicProfileImg.jpg");
+	         Image img = icon.getImage();
+	         Image changeImg = img.getScaledInstance(41,41, Image.SCALE_SMOOTH);
+	         ImageIcon changeIcon = new ImageIcon(changeImg);
+	        picturelabel = new JLabel(changeIcon);
+	          this.add(picturelabel);
+	          userPicturePanel.put(userName,this);
+	   
+	         //picturepanel 밖에서 list모으고 700언급될 때마다 picturePanel.setImg호출
+	         
+	     }
+	  public void setImg() {
+	       this.remove(picturelabel);
+	          revalidate();
+	          System.out.println(userName);
+	         ImageIcon icon1 = new ImageIcon("src/icon1.jpg");
+	         Image img2 = icon1.getImage();
+	         Image changeImg1 = img2.getScaledInstance(41,41, Image.SCALE_SMOOTH);
+	         ImageIcon changeIcon1 = new ImageIcon(changeImg1);
+	         //JLabel picturelabel2 = new JLabel(changeIcon1);
+	         picturelabel.setIcon(changeIcon1);
+	        this.add(picturelabel);
+	  }
+//	  class mouseAdapter extends MouseAdapter {
+//		  public void mouseClicked(MouseEvent e) {
+//			  picturelabel.setIcon(changeIcon1);
+//		  }
+//	  }
+//	  public void setImg(String src) {
+//		  this.remove(picturelabel);
+//		 ImageIcon change = new ImageIcon("D:\\FromNewVolume\\대학교\\전공3-2\\네트워크 프로그래밍\\NetP10-java-game (단톡방o) - 복사본\\JavaGameClient\\image2.jpg");
+//		 System.out.println(change);
+//		img = change.getImage();
+//		  Image changeImg2 = img.getScaledInstance(41,41, Image.SCALE_SMOOTH);
+//		  changeIcon1 = new ImageIcon(changeImg2);
+//		// picturelabel.setIcon(changeIcon1);
+//		 this.revalidate();
+//		 MouseAdapter m = new mouseAdapter();
+//		 this.addMouseListener(m);
+//	  }
+	
      
   }
 
@@ -425,7 +495,14 @@ public class ChatFriendList extends JFrame {
           
          public ListPanel(JLabel userNameLabel,int y,String name) {
             this.setLayout(new GridLayout(1,3));
-            PicturePanel picturePanel = new PicturePanel();
+            PicturePanel picturePanel = new PicturePanel(name);
+          //  picturePanel.setImg();
+            //name picturepanel map
+//            map.add(name,picturepanel);
+//            700
+//            서버에서 받은 프로필사진+username
+//            map이랑  pcitdj
+            // panel 을 갱신
             picturePanel.setBackground(Color.WHITE);
             this.setBackground(Color.WHITE);
            // checkBox.setBackground(Color.WHITE);
@@ -486,7 +563,8 @@ public class ChatFriendList extends JFrame {
                        
                     
                         String[] userListString= cm.data.split(",");
-                       
+                        userNameList = cm.al;
+                        System.out.println(userNameList);
                         //ShowInvitedFriendsList showInvitedFriendsList = new ShowInvitedFriendsList(cm.data, UserName);
                         
                                ListPanel userOnePanel;
@@ -573,15 +651,18 @@ public class ChatFriendList extends JFrame {
                            
                         break;
                      case "210": //단톡방에서 보낸 메시지가 서버를 통해 도착.
-                         System.out.println("도착"+cm.data);
+                         System.out.println("chtFriendList 클래스 안 도착"+cm.data);
                         // cm.multiChatNum로 구분해서 multiChat로 전송
                          for(int i=0;i<myMultiChat.size();i++) {//유저가 가지고 있는 멀티챗방중에 어떤 챗방에서 메시지가 온건지 확인
                             MultiChat findMultiRoom = myMultiChat.get(i);
                             if(findMultiRoom.getMultiNum()==cm.multiChatNum) {
-                               if (cm.UserName.equals(UserName))
+                               if (cm.UserName.equals(UserName)) {
+                                  System.out.println("cm.data:"+cm.data);
                                   findMultiRoom.AppendTextR(cm.data); // 내 메세지는 우측에
-                                   else
+                               }
+                                   else {
                                       findMultiRoom.AppendText(cm.data);
+                                   }
                                
                                
                             }
@@ -612,7 +693,9 @@ public class ChatFriendList extends JFrame {
                          }
                           
                           break;
-     
+                     case "700":
+                    	 //refreshPanel();
+                    	 break;
                         
                   
             /*case "200": // chat message

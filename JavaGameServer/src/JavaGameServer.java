@@ -10,10 +10,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -47,7 +51,7 @@ public class JavaGameServer extends JFrame {
    private static final int BUF_LEN = 128; // Windows 처럼 BUF_LEN 을 정의
    Map<Integer,ArrayList<String>> multiChatNumNmems= new HashMap<>();
    Map<String,ObjectOutputStream> clientsOutputStream = new HashMap<String,ObjectOutputStream>();
-   
+   Map<String,ImageIcon> profileMems = new HashMap<String,ImageIcon>();
    String invitedUsersStr; // 하나의 단톡방에 초대된 사람들 리스트
 
    /**
@@ -219,6 +223,7 @@ public class JavaGameServer extends JFrame {
            multiChatNum++;
            
          }
+         
             
       }
       // 모든 User들에게 Object를 방송. 채팅 message와 image object를 보낼 수 있다
@@ -274,6 +279,7 @@ public class JavaGameServer extends JFrame {
                
                
                ChatMsg obcm = new ChatMsg("SERVER", "101", userNameListStr);
+               obcm.al = userNameList;
                oos.writeObject(obcm);
             }
             
@@ -370,6 +376,39 @@ public class JavaGameServer extends JFrame {
          
         
       }
+      public void saveProfile(String img, String userName)
+      {
+         
+          File oldFile = new File(img);
+          File newFile = new File("\\src\\profilesPackage\\"+userName+".jpg");
+
+
+          try {
+              FileInputStream input = new FileInputStream(oldFile);
+              FileOutputStream output = new FileOutputStream(newFile);
+
+
+              byte[] buf = new byte[2048];
+
+              int read;
+
+              while((read = input.read(buf)) > 0)
+              {
+                  output.write(buf, 0, read);
+              }
+
+              input.close();
+              output.close();
+          }
+          catch (IOException e)
+          {
+              e.printStackTrace();
+          }
+          
+          WriteAll("101");
+          
+          
+      }
       public void run() {
          while (true) { // 사용자 접속을 계속해서 받기 위해 while문
             try {
@@ -399,7 +438,7 @@ public class JavaGameServer extends JFrame {
                   
                   userNameList.add(cm.UserName);
                   //String userNameListStr = String.join(",", userNameList);
-                       
+                  saveProfile("src/basicProfileImg.jpg", cm.UserName);
                   
                  // WriteOthersObject(cm);
                   WriteAll("101");
@@ -442,6 +481,13 @@ public class JavaGameServer extends JFrame {
                   //a.sendMsg(msg); a. sendMsg(number,list);
            
                   
+               }
+               else if(cm.code.matches("700")) {
+                   saveProfile(cm.img.toString(), cm.UserName);
+                   //WriteAll("700");
+                   //WriteAll("101");
+                   
+                   
                }
                else if (cm.code.matches("200")) {
                   msg = String.format("[%s] %s", cm.UserName, cm.data);
